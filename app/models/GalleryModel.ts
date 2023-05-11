@@ -1,10 +1,14 @@
-import mongoose, { Schema, models } from "mongoose";
+import mongoose, { Schema, model, models } from "mongoose";
 
-export const GallarySchema = new Schema({
-    name: {
-        type: String,
-        require: true
+export const GallerySchema = new Schema(
+    {   name: {
+            type: String,
+            require: true
+        },
     },
-});
+    { collection: 'gallery' }
+);
 
-export default mongoose?.models?.Gallery || mongoose.model("Gallery", GallarySchema);
+const Gallery = models.Gallery || model("Gallery", GallerySchema);
+
+export default Gallery; 

@@ -1,24 +1,25 @@
 import mongoose from "mongoose";
 
-const DB_URI = process.env.MONGO_URI || "";
+let isConnected = false; // track the connection 
+// let DB_URI = process.env.MONGO_URI || "";
 
-let cached = global.mongoose;
+export const connectMongoDB = async () => {
+  mongoose.set('strictQuery', true);
 
-if (!cached) cached = global.mongoose = { conn: null, promise: null };
-
-
-async function connectMongoDB() {
-  if (cached.conn) return cached.conn;
-
-  if (!cached.promise) {
-    cached.promise = mongoose
-      .set({ debug: true, strictQuery: false })
-      .connect(`${DB_URI}`)
-      .then((mongoose) => mongoose);
+  if (isConnected) {
+    console.log("MongoDB is already connected");
+    return; 
   }
 
-  cached.conn = await cached.promise;
-  return cached.conn;
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      dbName: "Project1",
+      useNewUrlParser: true, 
+      useUnifiedTopology: true, 
+    });
+    isConnected = true; 
+    console.log("MongoDB connected");
+  } catch (error) {
+    console.log(error);
+  }
 }
-
-export default connectMongoDB;

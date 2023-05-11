@@ -7,12 +7,12 @@ module.exports = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      gridTemplateColumns: {
+        sidebar: "240px auto", // for sidenavbar layout; adds grid-cols-sidebar class
+      }, 
+      gridTemplateRows: {
+        header: "64px auto", // for topnavbar layout; adds grid-rows-header class
       },
     },
   },
-  plugins: [],
 }

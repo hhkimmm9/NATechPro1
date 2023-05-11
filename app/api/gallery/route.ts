@@ -15,6 +15,11 @@ export const POST = async (req: Request) => {
     try {
         await connectMongoDB();
         const { name } = await req.json();
+
+        // // get image
+        // const image = req.files?.image;
+
+
         const gallery = await Gallery.create({ name });
         return new Response("Created gallery", { status: 200 });
     } catch (error: any) {

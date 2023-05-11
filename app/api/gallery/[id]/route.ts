@@ -1,5 +1,5 @@
 import Gallery from "@/models/GalleryModel";
-import { connectMongoDB } from "@/lib/db";
+import { connectMongoDB } from "@/config/db"
 
 
 export const GET = async (req: Request, { params }: { params: { id: string } } ) => {

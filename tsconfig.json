@@ -23,10 +23,12 @@
     "paths": {
       "@/*": ["./*"],
       "@/app/*": ["app/*"],
-      "@/lib/*": ["app/lib/*"],
-      "@/models/*": ["app/models/*"]
+      "@/backend/*": ["app/backend/*"],
+      "@/models/*": ["app/backend/models/*"],
+      "@/config/*": ["app/backend/config/*"],
+      "@/utils/*": ["app/backend/utils/*"],
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/lib/db.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/backend/db.js"],
   "exclude": ["node_modules"]
 }

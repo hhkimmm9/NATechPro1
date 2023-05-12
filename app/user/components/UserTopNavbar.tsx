@@ -1,19 +1,10 @@
 import React from "react";
-import classNames from "classnames";
 import { Text } from "@nextui-org/react";
 import Image from "next/image";
 
 function UserTopNavbar() {
   return (
-    <nav
-      className={classNames({
-        "bg-white": true,
-        "flex items-center": true,
-        "w-full z-10 px-5": true,
-        "min-h-[64px]": true,
-        fixed: true,
-      })}
-    >
+    <nav className="bg-white flex items-center w-full z-10 px-5 min-h-[64px]">
       <div className="text-green-900 text-xl p-1 font-bold">mosPic</div>
       <div style={{ display: "flex ", marginLeft: "auto" }}>
         <div className="flex gap-4 items-right">

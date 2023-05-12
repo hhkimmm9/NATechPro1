@@ -18,13 +18,11 @@ export default function UserLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className={inter.className}>
-      <div className="grid md:grid-rows-header">
-        <UserTopNavbar />
-        <div className="grid md:grid-cols-sidebar">
-          <UserSidebar />
-          <div className="bg-stone-50 top-[64px]">{children}</div>
-        </div>
+    <div className={`${inter.className} h-screen flex flex-col`}>
+      <UserTopNavbar />
+      <div className="grow flex flex-row items-stretch">
+        <UserSidebar />
+        <div className="flex flex-col bg-stone-50">{children}</div>
       </div>
     </div>
   );

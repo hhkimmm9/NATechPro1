@@ -1,6 +1,7 @@
 "use client";
 
 import { Card, Text, Grid, Row, Col, Spacer } from "@nextui-org/react";
+import SearchInput from "../components/SearchInput";
 
 export default function Gallery() {
   const list = [
@@ -48,11 +49,14 @@ export default function Gallery() {
   ];
 
   return (
-    <div className="p-5">
-      <Spacer y={3} />
-      <text className="font-bold">My Gallery</text>
-      <div className="p-5">
-        <Grid.Container gap={2} justify="flex-start">
+    <div className="p-5 flex flex-col">
+      <div>
+        <text className="font-bold text-lg px-5">My Gallery</text>
+        <SearchInput />
+        <Spacer></Spacer>
+      </div>
+      <div className="p-5 flex flex-col overflow-y-scroll h-screen">
+        <Grid.Container gap={2} wrap="wrap" justify="flex-start">
           {list.map((item, index) => (
             <Grid xs={6} sm={3} key={index}>
               <Card isPressable borderWeight="light">

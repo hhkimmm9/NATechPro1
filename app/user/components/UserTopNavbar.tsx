@@ -4,7 +4,7 @@ import Image from "next/image";
 
 function UserTopNavbar() {
   return (
-    <nav className="bg-white flex items-center w-full z-10 px-5 min-h-[64px]">
+    <nav className="bg-white flex items-center w-full z-10 px-5 min-h-[64px] border-b-2">
       <div className="text-green-900 text-xl p-1 font-bold">mosPic</div>
       <div style={{ display: "flex ", marginLeft: "auto" }}>
         <div className="flex gap-4 items-right">

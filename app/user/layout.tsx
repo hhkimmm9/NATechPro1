@@ -20,9 +20,9 @@ export default function UserLayout({
   return (
     <div className={`${inter.className} h-screen flex flex-col`}>
       <UserTopNavbar />
-      <div className="grow flex flex-row items-stretch">
+      <div className="grow flex flex-row">
         <UserSidebar />
-        <div className="flex flex-col w-full bg-stone-50">{children}</div>
+        <div className="flex flex-col w-full bg-white">{children}</div>
       </div>
     </div>
   );

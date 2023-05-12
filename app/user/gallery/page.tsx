@@ -30,22 +30,22 @@ export default function Gallery() {
       img: "/images/fruit-5.jpeg",
       tags: "fruit",
     },
-    {
-      title: "Lemon 2",
-      img: "/images/fruit-6.jpeg",
-    },
-    {
-      title: "Banana",
-      img: "/images/fruit-7.jpeg",
-    },
-    {
-      title: "Watermelon",
-      img: "/images/fruit-8.jpeg",
-    },
-    {
-      title: "Watermelon",
-      img: "/images/fruit-8.jpeg",
-    },
+    // {
+    //   title: "Lemon 2",
+    //   img: "/images/fruit-6.jpeg",
+    // },
+    // {
+    //   title: "Banana",
+    //   img: "/images/fruit-7.jpeg",
+    // },
+    // {
+    //   title: "Watermelon",
+    //   img: "/images/fruit-8.jpeg",
+    // },
+    // {
+    //   title: "Watermelon",
+    //   img: "/images/fruit-8.jpeg",
+    // },
   ];
 
   return (
@@ -55,7 +55,11 @@ export default function Gallery() {
         <SearchInput />
         <Spacer></Spacer>
       </div>
-      <div className="p-5 flex">
+      <div>
+        <text className="px-5 font-semibold">Sort By: </text>
+        <Spacer></Spacer>
+      </div>
+      <div className="p-5 flex bg-blue-900/10 rounded-lg">
         <Grid.Container gap={2} wrap="wrap" justify="flex-start">
           {list.map((item, index) => (
             <Grid xs={6} sm={3} key={index}>

@@ -49,13 +49,13 @@ export default function Gallery() {
   ];
 
   return (
-    <div className="p-5 flex flex-col">
+    <div className="p-5 flex flex-col h-full">
       <div>
         <text className="font-bold text-lg px-5">My Gallery</text>
         <SearchInput />
         <Spacer></Spacer>
       </div>
-      <div className="p-5 flex flex-col overflow-y-scroll h-screen">
+      <div className="p-5 flex">
         <Grid.Container gap={2} wrap="wrap" justify="flex-start">
           {list.map((item, index) => (
             <Grid xs={6} sm={3} key={index}>

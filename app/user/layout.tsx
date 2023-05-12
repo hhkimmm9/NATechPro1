@@ -22,7 +22,7 @@ export default function UserLayout({
       <UserTopNavbar />
       <div className="grow flex flex-row items-stretch">
         <UserSidebar />
-        <div className="flex flex-col bg-stone-50">{children}</div>
+        <div className="flex flex-col w-full bg-stone-50">{children}</div>
       </div>
     </div>
   );

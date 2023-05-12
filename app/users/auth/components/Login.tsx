@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { signIn, signOut, useSession, getProviders } from 'next-auth/react'
 
 const Login = () => {
   const [emailInput, setEmailInput] = useState('')
@@ -29,6 +30,18 @@ const Login = () => {
     })
   }
 
+  const [providers, setProviders] = useState<any>(null)
+
+  useEffect(() => {
+    const initProviders = async () => {
+      const response = await getProviders()
+
+      setProviders(response)
+    }
+
+    initProviders()
+  },[])
+
   return (
     <div className='flex flex-col space-y-8 mt-6'>
       {/* oauth */}
@@ -45,6 +58,15 @@ const Login = () => {
           />
           <span>Continue with Google</span>
         </button>
+
+        {/* from next-auth */}
+        <div>
+          {providers && Object.values(providers).map((provider: any) => (
+            <button type='button' key={provider.name} onClick={() => signIn(provider.id)}>
+              provider
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className='mx-auto text-gray-500 font-light flex flex-row items-center gap-2'>

@@ -23,14 +23,14 @@ const Register = () => {
       if (agree) {
         axios.post('#', {
           email,
-          pwd,
+          password: pwd,
           notify,
         })
         .then((res) => {
-          console.log(res)
+          // 
         })
         .catch((err) => {
-          console.log(err)
+          // 
         })
       }
       else {

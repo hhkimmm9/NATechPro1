@@ -50,15 +50,15 @@ const Register = () => {
         {/* text input */}
         <div className='flex flex-col space-y-3'>
           <div className='flex flex-col'>
-            <p>Email</p>
+            <label>Email</label>
             <input type="text" value={emailInput} onChange={e => setEmailInput(e.target.value)} className='border p-1.5'/>
           </div>
           <div className='flex flex-col'>
-            <p className='whitespace-nowrap'> Password <span>(6 Characters minimum)</span> </p>
+            <label className='whitespace-nowrap'> Password <span>(6 Characters minimum)</span> </label>
             <input type="password" value={pwdInput} onChange={e => setPwdInput(e.target.value)} className='border p-1.5'/>
           </div>
           <div className='flex flex-col'>
-            <p className='whitespace-nowrap'> Password confirmation </p>
+            <label className='whitespace-nowrap'> Password confirmation </label>
             <input type="password" value={confirmPwdInput} onChange={e => setConfirmPwdInput(e.target.value)} className='border p-1.5'/>
           </div>
         </div>
@@ -67,18 +67,18 @@ const Register = () => {
         <div className='flex flex-col gap-2'>
           <div className='flex gap-2 items-start'>
             <input type="checkbox" checked={agreeCheckbox} onChange={e => setAgreeCheckbox(e.target.checked)} className='mt-1' />
-            <p className='text-sm'>
+            <label className='text-sm'>
               <span>I agree to the </span>
               <a href="#" className='text-blue-500 hover:text-blue-600 hover:underline'>Terms of Service, General Terms and Conditions</a>
               <span> and </span>
               <a href="#" className='text-blue-500 hover:text-blue-600 hover:underline'>Privacy Policy</a>
               <span>.</span>
-            </p>
+            </label>
           </div>
 
           <div className='flex gap-2'>
             <input type="checkbox" checked={notifyCheckbox} onChange={e => setNotifyCheckbox(e.target.checked)} />
-            <p className='text-sm'> Notify me about new features and special offers. </p>
+            <label className='text-sm'> Notify me about new features and special offers. </label>
           </div>
         </div>
 

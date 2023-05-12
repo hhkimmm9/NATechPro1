@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <div>
+    <>
       <div className="text-center p-12">
         <div>
           <h1 className="text-4xl font-semibold">Combine Images</h1>
@@ -60,6 +60,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }

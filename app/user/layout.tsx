@@ -19,11 +19,11 @@ export default function UserLayout({
 }) {
   return (
     <div className={inter.className}>
-      <div className="grid min-h-screen grid-rows-header">
+      <div className="grid md:grid-rows-header">
         <UserTopNavbar />
         <div className="grid md:grid-cols-sidebar">
           <UserSidebar />
-          <div className="bg-stone-50">{children}</div>
+          <div className="bg-stone-50 top-[64px]">{children}</div>
         </div>
       </div>
     </div>

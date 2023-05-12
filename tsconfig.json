@@ -29,6 +29,6 @@
       "@/utils/*": ["app/backend/utils/*"],
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/backend/db.js", "app/test/page.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/backend/db.js", "app/test/page.js", "app/api/gallery/route.ts"],
   "exclude": ["node_modules"]
 }

@@ -6,22 +6,37 @@ import axios from 'axios'
 export default function Test() {
     const [name, setName] = useState("default")
     const [image, setImage] = useState("")
-    const cloudinary_name = process.env.NEXT_PUBLIC_CLOUDINARY_NAME
-    const cloudinary_api_key = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY
-    const uploadPreset = process.env.NEXT_PUBLIC_CLOUDINARY_PRESET
+    const [imagePreview, setImagePreview] = useState("")
+
+    const generateImagePreview = (e) => {
+        const reader = new FileReader()
+        reader.onload = () => {
+            if (reader.readyState === 2) {
+                setImagePreview(reader.result)
+            }
+        }
+        setImage(e.target.files[0])
+        reader.readAsDataURL(e.target.files[0])
+    }
 
 
-    async function handleFile(e) {
-        const url = `https://api.cloudinary.com/v1_1/${cloudinary_name}/upload`
+    // upload to cloudinary on client side, retrieve url from response and send a POST request to /api/gallery to create a new gallery 
+    async function handleFile() {
+        const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/upload`
         const formData = new FormData()
-        formData.append('file', e.target.files[0])
-        formData.append('api_key', cloudinary_api_key)
-        formData.append('upload_preset', uploadPreset)
+        formData.append('file', image)
+        formData.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY)
+        formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_PRESET)
 
         axios.post(url, formData)
         .then(res => {
-            console.log(res.data.secure_url)
+            // console.log(res.data.secure_url)
             setImage(res.data.secure_url)
+            // create gallery
+            axios.post(`${process.env.NEXT_PUBLIC_URL}/api/gallery`, {
+                "name": name,
+                "image": res.data.secure_url
+            }).catch(err => console.log(err))
         })
         .catch(err => console.log(err));
 
@@ -30,8 +45,10 @@ export default function Test() {
 
     return (
         <div>
-            <input type="file" name="image" onChange={handleFile}/>
-            <img src={image} style={{maxWidth: '500px', maxHeight:'200px'}}/>
+            <input type="text" name="name" placeholder="enter gallery name" onChange={(e) => setName(e.target.value)}/>
+            <input type="file" name="image" onChange={generateImagePreview}/>
+            <img src={imagePreview} style={{maxWidth: '500px', maxHeight:'200px'}}/>
+            <button onClick={handleFile}>Create Gallery</button>
 
         </div>
     )

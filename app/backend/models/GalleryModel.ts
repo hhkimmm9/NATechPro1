@@ -1,8 +1,8 @@
 import mongoose, { Schema, model, models } from "mongoose";
 
-export interface GalleryInterface {
+export interface IGallery {
     name: string
-    img: string 
+    image: string 
 
 }
 
@@ -11,7 +11,7 @@ export const GallerySchema = new Schema(
             type: String,
             require: true
         },
-        img: {
+        image: {
             type: String,
             require: true
         }

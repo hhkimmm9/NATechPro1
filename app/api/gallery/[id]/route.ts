@@ -9,24 +9,24 @@ export const GET = async (req: Request, { params }: { params: { id: string } } )
         if (!gallery) return new Response(`Gallery id:${params.id} not found`, { status: 404 });
         return new Response(JSON.stringify(gallery), { status: 200 })
 
-    } catch (error: any) {
-        console.log(error)
-        return new Response("Internal Server Error", { status: 500 });
+    } catch (err: any) {
+        return new Response(err.message, { status: 500 });
     }
 }
 
 export const PATCH = async (req:Request, { params }: { params: { id: string } } ) => {
-    const { name } = await req.json();
+    const { name, image } = await req.json();
     try {
         await connectMongoDB();
         const existingGallery = await Gallery.findById(params.id);
         if (!existingGallery) return new Response(`Gallery id:${params.id} not found`, { status: 404 });
         // update
         existingGallery.name = name; 
+        existingGallery.image = image;
         await existingGallery.save();
         return new Response(`Successfully updated gallery id:${params.id}`);
-    } catch (err) {
-        return new Response("Error updating gallery", { status: 500 });
+    } catch (err:any) {
+        return new Response(err.message, { status: 500 });
     }
 }
 
@@ -35,7 +35,7 @@ export const DELETE = async (req:Request, { params }: { params: { id: string } }
         await connectMongoDB();
         await Gallery.findByIdAndRemove(params.id);
         return new Response(`Successfully deleted gallery id:${params.id}`);
-    } catch (err) {
-        return new Response("Error updating gallery", { status: 500 });
+    } catch (err:any) {
+        return new Response(err.message, { status: 500 });
     }
 }

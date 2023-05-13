@@ -11,16 +11,15 @@ export const TagSchema = new Schema(
             type: String,
             require: true
         },
-        image_id: {
-            type: Schema.Types.ObjectId,
-            require: true
-        },
         user_id: {
             type: String,
             require: true
-        }
+        },
+        images: [
+            { type: Schema.Types.ObjectId, ref: 'image' }
+        ]
     },
-    { collection: 'Tag' }
+    { collection: 'tag' }
 );
 
 const Tag = models.Tag || model("Tag", TagSchema);

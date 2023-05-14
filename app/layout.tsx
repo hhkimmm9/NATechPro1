@@ -1,5 +1,8 @@
-import './globals.css'
+import './css/globals.css'
 import { Inter } from 'next/font/google'
+import SideNavBar from './components/SideNavBar';
+import TopNavBar from './components/TopNavBar';
+import Footer from './components/Footer';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,8 +17,23 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en">      
+      <body className={inter.className}>
+        <div className='flex flex-col relative'>
+          <TopNavBar />
+
+          <div className='flex flex-row mb-52'>
+            {/* <SideNavBar/> */}
+            <div className='w-full'>
+              {children}
+            </div>
+          </div>
+
+          <div className='absolute bottom-0 w-full'>
+            <Footer/>
+          </div>
+        </div>
+      </body>
     </html>
   )
 }

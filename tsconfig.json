@@ -19,10 +19,16 @@
         "name": "next"
       }
     ],
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@/app/*": ["app/*"],
+      "@/backend/*": ["app/backend/*"],
+      "@/models/*": ["app/backend/models/*"],
+      "@/config/*": ["app/backend/config/*"],
+      "@/utils/*": ["app/backend/utils/*"],
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/api/users/route.js", "app/libs/MongoConnect.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/backend/db.js", "app/test/page.ts", "app/api/gallery/route.ts"],
   "exclude": ["node_modules"]
 }

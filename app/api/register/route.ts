@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import * as bcrypt from "bcryptjs";
-import User from "@/app/models/UserModel";
-import { connectMongoDB } from "@/app/libs/MongoConnect";
+import User from "@/app/backend/models/UserModel";
+import { connectMongoDB } from "@/config/db"
 
 interface RequestBody {
   email: string;
@@ -10,9 +10,9 @@ interface RequestBody {
 
 export async function POST(req: Request) {
   const body: RequestBody = await req.json();
-  connectMongoDB().catch((err) => new Response(err));
 
   try {
+    await connectMongoDB();
     const { email, password } = body;
 
     if (!email || !password)

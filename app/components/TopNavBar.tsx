@@ -22,7 +22,7 @@ const TopNavBar = () => {
         </div>
 
         {/* signup */}
-        <Link href='/users/auth' className='bg-sky-600 rounded-2xl py-2 px-6 text-white whitespace-nowrap'>
+        <Link href='/auth?tab=register' className='bg-sky-600 rounded-2xl py-2 px-6 text-white whitespace-nowrap'>
           Sign up
         </Link>
       </div>

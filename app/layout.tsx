@@ -2,7 +2,6 @@
 
 import './css/globals.css'
 import { Inter } from 'next/font/google'
-import SideNavBar from './components/SideNavBar';
 import TopNavBar from './components/TopNavBar';
 import Footer from './components/Footer';
 import Provider from './components/Provider';
@@ -30,7 +29,6 @@ export default function RootLayout({
             <TopNavBar />
 
             <div className='flex flex-row'>
-              {/* <SideNavBar/> */}
               <NextUIProvider>
                 <div className='w-full'>
                   {children}

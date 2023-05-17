@@ -51,7 +51,7 @@ const Login = () => {
         console.log(err);
       }
     } catch (err: any) {
-      console.log(err);
+      console.log(JSON.stringify(err));
     }
   };
 

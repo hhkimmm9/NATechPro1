@@ -28,13 +28,13 @@ export default function RootLayout({
           <div className='flex flex-col relative h-screen'>
             <TopNavBar />
 
-            <div className='flex flex-row'>
-              <NextUIProvider>
-                <div className='w-full'>
-                  {children}
-                </div>
-              </NextUIProvider>
-            </div>
+            <NextUIProvider>
+              <div className='flex flex-row'>
+                  <div className='w-full'>
+                    {children}
+                  </div>
+              </div>
+            </NextUIProvider>
 
             <div className='absolute bottom-0 w-full'>
               <Footer/>

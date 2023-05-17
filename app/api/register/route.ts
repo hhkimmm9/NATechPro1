@@ -10,9 +10,9 @@ interface RequestBody {
 
 export async function POST(req: Request) {
   const body: RequestBody = await req.json();
+  await connectMongoDB();
 
   try {
-    await connectMongoDB();
     const { email, password } = body;
 
     if (!email || !password)

@@ -73,8 +73,6 @@ const Login = () => {
         <hr className="w-60" />
       </div>
       <div className="text-gray-500 font-light flex flex-col gap-2">
-        {error && <span className="text-red-500 text-xs">{error}</span>}
-
         <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
           {/* text input */}
           <div className="flex flex-col space-y-3">
@@ -97,6 +95,9 @@ const Login = () => {
               />
             </div>
           </div>
+
+          {/* TODO (HKim): couldn't see the error message. need to work on it later once next-auth works. */}
+          {error && <span className="text-red-500 text-xs">{error}</span>}
 
           {/* checkboxes */}
           <div className="flex gap-2">

@@ -8,32 +8,11 @@ const Login = () => {
   const [emailInput, setEmailInput] = useState("");
   const [pwdInput, setPwdInput] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+  const [providers, setProviders] = useState<any>(null);
 
   const router = useRouter();
   const [error, setError] = useState("");
 
-  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault()
-
-  //   const email = e.currentTarget.elements[0].value
-  //   const pwd = e.currentTarget.elements[1].value
-  //   const rememberMe = e.currentTarget.elements[2].checked
-
-  //   if (rememberMe) {
-  //     // 🍪
-  //   }
-
-  //   axios.post('/api/login', {
-  //     email,
-  //     password: pwdInput
-  //   })
-  //   .then(res => {
-  //     //
-  //   })
-  //   .catch(err => {
-  //     //
-  //   })
-  // }
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -52,15 +31,16 @@ const Login = () => {
       }
     } catch (err: any) {
       console.log(JSON.stringify(err));
+    } finally {
+      if (rememberMe == true) {
+        // cookie
+      }
     }
   };
-
-  const [providers, setProviders] = useState<any>(null);
 
   useEffect(() => {
     const initProviders = async () => {
       const response = await getProviders();
-
       setProviders(response);
     };
 
@@ -71,26 +51,6 @@ const Login = () => {
     <div className="flex flex-col space-y-8 mt-6">
       {/* oauth */}
       <div className="flex flex-col gap-2 text-gray-600 w-min mx-auto">
-        <button className="py-2 pl-4 pr-8 border-2 border-gray-300 rounded-full text-center whitespace-nowrap flex gap-2 items-center">
-          <Image
-            src="/images/logos/fb-logo.png"
-            alt="Facebook Logo"
-            width={20}
-            height={20}
-            className="object-contain"
-          />
-          <span>Continue with Facebook</span>
-        </button>
-        <button className="py-2 pl-4 pr-8 border-2 border-gray-300 rounded-full text-center whitespace-nowrap flex gap-2 items-center">
-          <Image
-            src="/images/logos/google-logo.png"
-            alt="Google Logo"
-            width={20}
-            height={20}
-            className="object-contain"
-          />
-          <span>Continue with Google</span>
-        </button>
 
         {/* from next-auth */}
         <div>
@@ -101,7 +61,7 @@ const Login = () => {
                 key={provider.name}
                 onClick={() => signIn(provider.id)}
               >
-                provider
+                oauth providers
               </button>
             ))}
         </div>

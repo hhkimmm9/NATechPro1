@@ -26,18 +26,18 @@ export default function RootLayout({
         <head>{CssBaseline.flush()}</head>
 
         <body className={inter.className}>
-          <div className='flex flex-col relative h-screen'>
-            <TopNavBar />
+          <div className='flex flex-col relative min-h-screen'>
+            <div className='fixed top-0 left-0 right-0'>
+              <TopNavBar />
+            </div>
 
             <NextUIProvider>
-              <div className='flex flex-row'>
-                  <div className='w-full'>
-                    {children}
-                  </div>
+              <div className='mt-16 mb-48'>
+                { children }
               </div>
             </NextUIProvider>
 
-            <div className='absolute bottom-0 w-full'>
+            <div className='absolute bottom-0 left-0 right-0'>
               <Footer/>
             </div>
           </div>

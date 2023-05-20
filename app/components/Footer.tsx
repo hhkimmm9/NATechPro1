@@ -3,7 +3,7 @@ import Logo from './Logo'
 
 const Footer = () => {
   return (
-    <div className='bg-gray-300 p-8 flex justify-around'>
+    <div className='bg-gray-300 p-8 flex justify-around max-h-[192px]'>
       <div className='flex flex-col gap-2 mr-32'>
         <Logo />
         <a href="#">Instagram</a>

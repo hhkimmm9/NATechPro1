@@ -1,24 +1,39 @@
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
-
+import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions = {
+  pages: {
+    signIn: "/auth",
+  },
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      async profile(profile) {
+        const res = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/oAuth/`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: profile.email,
+          }),
+        });
+        const user = await res.json();
+        if (res.status === 200) {
+          return { id: profile.sub, ...user };
+        } else {
+          throw new Error(JSON.stringify({ message: user, status: res.status }));
+        }
+      },
+    }),
     CredentialsProvider({
-      // The name to display on the sign in form (e.g. "Sign in with...")
       name: "Credentials",
-      // `credentials` is used to generate a form on the sign in page.
-      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-      // e.g. domain, username, password, 2FA token, etc.
-      // You can pass any HTML attribute to the <input> tag through the object.
       credentials: {
-        email: { label: "Username", type: "text", placeholder: "email@example.com" },
+        email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        // Add logic here to look up the user from the credentials supplied
-
-        const res = await fetch("/api/login", {
+        const res = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/login/`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -26,23 +41,27 @@ export const authOptions = {
             password: credentials?.password,
           }),
         });
-
         const user = await res.json();
 
-
-        if (user) {
-          // Any object returned will be saved in `user` property of the JWT
+        if (res.status === 200) {
           return user;
         } else {
-          // If you return null then an error will be displayed advising the user to check their details.
-          return null;
-
-          // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+          throw new Error(JSON.stringify({ message: user, status: res.status }));
         }
       },
     }),
   ],
-}
+  callbacks: {
+    async jwt({ token, user }: any) {
+      return { ...token, ...user };
+    },
+
+    async session({ session, token }: any) {
+      session.user = token as any;
+      return session;
+    },
+  },
+};
 
 const handler = NextAuth(authOptions);
 

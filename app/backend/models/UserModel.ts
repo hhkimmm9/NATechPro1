@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+export interface Iuser {
+  email: string;
+  password: string;
+}
+
 const userSchema = new mongoose.Schema(
   {
     email: {

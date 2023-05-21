@@ -1,7 +1,9 @@
 import Gallery from "@/models/GalleryModel";
 import { connectMongoDB } from "@/config/db"
 
-
+/* [GET] http:/localhost:3000/api/gallery/6469913f713c10b3cc553ad3
+ * return gallery with the specified id 
+ */
 export const GET = async (req: Request, { params }: { params: { id: string } } ) => {
     try {
         await connectMongoDB(); 
@@ -14,8 +16,12 @@ export const GET = async (req: Request, { params }: { params: { id: string } } )
     }
 }
 
+/* [PATCH] http:/localhost:3000/api/gallery/6469913f713c10b3cc553ad3
+ * update gallery with the specified id 
+ * req body: name, image, tags
+ */
 export const PATCH = async (req:Request, { params }: { params: { id: string } } ) => {
-    const { name, image } = await req.json();
+    const { name, image, tags } = await req.json();
     try {
         await connectMongoDB();
         const existingGallery = await Gallery.findById(params.id);
@@ -23,6 +29,7 @@ export const PATCH = async (req:Request, { params }: { params: { id: string } } 
         // update
         existingGallery.name = name; 
         existingGallery.image = image;
+        existingGallery.tags = tags;
         await existingGallery.save();
         return new Response(`Successfully updated gallery id:${params.id}`);
     } catch (err:any) {
@@ -30,6 +37,10 @@ export const PATCH = async (req:Request, { params }: { params: { id: string } } 
     }
 }
 
+
+/* [DELETE] http:/localhost:3000/api/gallery/6469913f713c10b3cc553ad3
+ * delete gallery with the specified id 
+ */
 export const DELETE = async (req:Request, { params }: { params: { id: string } } ) => {
     try {
         await connectMongoDB();

@@ -3,7 +3,8 @@ import mongoose, { Schema, model, models } from "mongoose";
 export interface IGallery {
     name: string
     image: string 
-
+    userID: mongoose.Schema.Types.ObjectId,
+    tags: string[]
 }
 
 export const GallerySchema = new Schema(
@@ -15,10 +16,15 @@ export const GallerySchema = new Schema(
             type: String,
             required: true
         },
-        authorID: {
+        userID: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
             required: true
+        },
+        tags: {
+            type: [String],
+            required: true 
+
         }
     },
     { timestamps: true }

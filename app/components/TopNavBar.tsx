@@ -3,8 +3,7 @@
 import React from "react";
 import Logo from "./Logo";
 import Link from "next/link";
-import SignInButton from "./SigninButton";
-import { signIn } from "next-auth/react";
+import SignInButton from "./SignInButton";
 
 const TopNavBar = () => {
   return (

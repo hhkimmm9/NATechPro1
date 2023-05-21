@@ -55,6 +55,26 @@ const Login = () => {
     }
   };
 
+  const googleSignIn = async () => {
+    try {
+      const response = await signIn("google", {
+        redirect: false,
+      });
+
+      console.log(response);
+
+      if (!response?.error) {
+        // router.push("/");
+      } else {
+        const err = JSON.parse(response.error);
+        setError(err.message);
+        console.log(err);
+      }
+    } catch (err: any) {
+      console.log(JSON.stringify(err));
+    }
+  };
+
   const [providers, setProviders] = useState<any>(null);
 
   useEffect(() => {
@@ -72,23 +92,14 @@ const Login = () => {
       {/* oauth */}
       <div className="flex flex-col gap-2 text-gray-600 w-min mx-auto">
         <button className="py-2 pl-4 pr-8 border-2 border-gray-300 rounded-full text-center whitespace-nowrap flex gap-2 items-center">
-          <Image
-            src="/images/logos/fb-logo.png"
-            alt="Facebook Logo"
-            width={20}
-            height={20}
-            className="object-contain"
-          />
+          <Image src="/images/logos/fb-logo.png" alt="Facebook Logo" width={20} height={20} className="object-contain" />
           <span>Continue with Facebook</span>
         </button>
-        <button className="py-2 pl-4 pr-8 border-2 border-gray-300 rounded-full text-center whitespace-nowrap flex gap-2 items-center">
-          <Image
-            src="/images/logos/google-logo.png"
-            alt="Google Logo"
-            width={20}
-            height={20}
-            className="object-contain"
-          />
+        <button
+          className="py-2 pl-4 pr-8 border-2 border-gray-300 rounded-full text-center whitespace-nowrap flex gap-2 items-center"
+          onClick={googleSignIn}
+        >
+          <Image src="/images/logos/google-logo.png" alt="Google Logo" width={20} height={20} className="object-contain" />
           <span>Continue with Google</span>
         </button>
 
@@ -96,11 +107,7 @@ const Login = () => {
         <div>
           {providers &&
             Object.values(providers).map((provider: any) => (
-              <button
-                type="button"
-                key={provider.name}
-                onClick={() => signIn(provider.id)}
-              >
+              <button type="button" key={provider.name} onClick={() => signIn(provider.id)}>
                 provider
               </button>
             ))}
@@ -120,48 +127,27 @@ const Login = () => {
           <div className="flex flex-col space-y-3">
             <div className="flex flex-col">
               <label> Email </label>
-              <input
-                type="text"
-                value={emailInput}
-                onChange={(e) => setEmailInput(e.target.value)}
-                className="border p-1.5"
-              />
+              <input type="text" value={emailInput} onChange={(e) => setEmailInput(e.target.value)} className="border p-1.5" />
             </div>
             <div className="flex flex-col">
               <label className="whitespace-nowrap"> Password </label>
-              <input
-                type="text"
-                value={pwdInput}
-                onChange={(e) => setPwdInput(e.target.value)}
-                className="border p-1.5"
-              />
+              <input type="text" value={pwdInput} onChange={(e) => setPwdInput(e.target.value)} className="border p-1.5" />
             </div>
           </div>
 
           {/* checkboxes */}
           <div className="flex gap-2">
-            <input
-              type="checkbox"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-            />
+            <input type="checkbox" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
             <label> Remember me </label>
           </div>
 
-          <button
-            type="submit"
-            onClick={() => signIn}
-            className="bg-sky-600 w-min py-2 px-6 whitespace-nowrap rounded-full text-white hover:bg-sky-500 mx-auto"
-          >
+          <button type="submit" className="bg-sky-600 w-min py-2 px-6 whitespace-nowrap rounded-full text-white hover:bg-sky-500 mx-auto">
             Log in
           </button>
         </form>
 
         <div className="w-4/5 mx-auto text-center">
-          <p className="text-sm">
-            This form is protected by hCaptcha and its Privacy Policy and Terms
-            of Service.
-          </p>
+          <p className="text-sm">This form is protected by hCaptcha and its Privacy Policy and Terms of Service.</p>
         </div>
       </div>
     </div>

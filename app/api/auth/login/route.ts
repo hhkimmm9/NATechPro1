@@ -1,15 +1,11 @@
 import { NextResponse } from "next/server";
-import User from "@/app/backend/models/UserModel";
+import User, { Iuser } from "@/app/backend/models/UserModel";
 import { connectMongoDB } from "@/config/db";
 import * as bcrypt from "bcryptjs";
-
-interface RequestBody {
-  email: string;
-  password: string;
-}
+import { signJwtAccessToken } from "@/app/backend/utils/jwt";
 
 export async function POST(req: Request) {
-  const body: RequestBody = await req.json();
+  const body: Iuser = await req.json();
 
   try {
     await connectMongoDB();
@@ -35,7 +31,13 @@ export async function POST(req: Request) {
       });
 
     const { password: pass, ...userWithoutPass } = foundUser._doc;
-    return NextResponse.json(userWithoutPass);
+    const accessToken = signJwtAccessToken(userWithoutPass);
+    const user = {
+      ...userWithoutPass,
+      accessToken,
+    };
+
+    return new Response(JSON.stringify(user));
   } catch (err: any) {
     return new Response(err.message, { status: 500 });
   }

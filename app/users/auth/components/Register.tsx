@@ -58,7 +58,7 @@ const Register = () => {
     }
 
     axios
-      .post(`${process.env.NEXT_PUBLIC_URL}/api/register`, {
+      .post(`${process.env.NEXT_PUBLIC_URL}/api/auth/register`, {
         email: emailInput,
         password: pwdInput,
       })

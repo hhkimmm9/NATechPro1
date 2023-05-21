@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import * as bcrypt from "bcryptjs";
 import User from "@/app/backend/models/UserModel";
-import { connectMongoDB } from "@/config/db"
+import { connectMongoDB } from "@/config/db";
 
 interface RequestBody {
   email: string;
@@ -10,18 +10,16 @@ interface RequestBody {
 
 export async function POST(req: Request) {
   const body: RequestBody = await req.json();
-  await connectMongoDB();
 
   try {
+    await connectMongoDB();
     const { email, password } = body;
 
-    if (!email || !password)
-      return new Response("All fields are required", { status: 400 });
+    if (!email || !password) return new Response("All fields are required", { status: 400 });
 
     // Check if user already exists
     const foundUser = await User.findOne({ email: email }).exec();
-    if (foundUser)
-      return new Response("Email already exists.", { status: 409 });
+    if (foundUser) return new Response("Email already exists.", { status: 409 });
 
     // Password ecryption
     const salt = await bcrypt.genSalt();

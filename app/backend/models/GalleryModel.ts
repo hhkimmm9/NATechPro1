@@ -3,20 +3,31 @@ import mongoose, { Schema, model, models } from "mongoose";
 export interface IGallery {
     name: string
     image: string 
-
+    userID: mongoose.Schema.Types.ObjectId,
+    tags: string[]
 }
 
 export const GallerySchema = new Schema(
     {   name: {
             type: String,
-            require: true
+            required: true
         },
         image: {
             type: String,
-            require: true
+            required: true
+        },
+        userID: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true
+        },
+        tags: {
+            type: [String],
+            required: true 
+
         }
     },
-    { collection: 'gallery' }
+    { timestamps: true }
 );
 
 const Gallery = models.Gallery || model("Gallery", GallerySchema);

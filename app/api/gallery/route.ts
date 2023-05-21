@@ -1,6 +1,7 @@
 import Gallery, { IGallery } from "@/models/GalleryModel"
 import { connectMongoDB } from "@/config/db"
-import { extractTokenAndVerify } from "@/utils/jwt"
+import { verifyJwt } from "@/utils/jwt"
+
 /* [GET] http:/localhost:3000/api/gallery  
  *  get all galleries created by a specific user                      
  *  user is authenticated by verifying bearer token that is sent under headers
@@ -13,10 +14,13 @@ export const GET = async (req:Request) => {
 
     try {
         // verify token and extract userID
-        const decodedToken = extractTokenAndVerify(req)
-        if (!decodedToken) return new Response("Unauthorized (wrong or expired token)", { status: 403 });
-        const userID = decodedToken._id 
+        const accessToken = req.headers.get("authorization");
+        const token = accessToken?.split(' ')[1];
+        const decodedToken = verifyJwt(token || "");
+        if (!accessToken || !decodedToken) return new Response("Unauthorized (wrong or expired token)", { status: 403 });
+        const userID = decodedToken._id;
 
+        // user verified, get all galleries by that user 
         // req params - tags
         const url = new URL(req.url);
         const tags = url.searchParams.get("tags")
@@ -43,6 +47,14 @@ export const POST = async (req: Request) => {
     await connectMongoDB();
 
     try {
+        // verify token and extract userID
+        const accessToken = req.headers.get("authorization");
+        const token = accessToken?.split(' ')[1];
+        const decodedToken = verifyJwt(token || "");
+        if (!accessToken || !decodedToken) return new Response("Unauthorized (wrong or expired token)", { status: 403 });
+        const userID = decodedToken._id;
+
+        // user verified, create gallery for that user 
         const body: IGallery = await req.json();
         const gallery = await Gallery.create(body);
         return new Response("Gallery created", { status: 200 });

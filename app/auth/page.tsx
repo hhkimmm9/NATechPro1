@@ -3,10 +3,17 @@
 import React from 'react'
 import Login from './components/Login'
 import Register from './components/Register'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 const page = () => {
   const [hasAccount, setHasAccount] = useState(true)
+
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    searchParams.get('tab') == 'register' ? setHasAccount(false) : setHasAccount(true)
+  }, [])
   
   return (
     <div className='max-w-4xl flex flex-col p-14 mx-auto'>

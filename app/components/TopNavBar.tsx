@@ -10,22 +10,24 @@ const TopNavBar = () => {
   const { data: session } = useSession();
 
   return (
-    <nav className="bg-white flex justify-between items-center w-full z-10 px-5 min-h-[64px] border-b-2 relative">
-      <Link href='/' className='w-[216px]'>
+    <div className='relative'>
+      <nav className="grid grid-cols-4 gap-8 bg-white items-center w-full z-10 px-5 min-h-[64px] border-b-2">
         <Logo />
-      </Link>
 
-      <div className='flex w-1/2 justify-around text-lg font-semibold'>
+        <div className='col-start-2 col-span-2 col-end-4 flex justify-around text-lg font-semibold'>
+          { session?.user ? (
+              <Link href="/user/gallery" className='text-black hover:underline'>Gallery</Link>
+            ) : (
+              <></>
+            ) 
+          }
+          <Link href="#" className='text-black hover:underline'>FAQ</Link>
+          <Link href="#" className='text-black hover:underline'>Contact</Link>
+        </div>
 
-      {(session && session.user) &&
-        <Link href="/user/gallery" className='text-black hover:underline'>Gallery</Link>
-      }
-        <Link href="#" className='text-black hover:underline'>FAQ</Link>
-        <Link href="#" className='text-black hover:underline'>Contact</Link>
-      </div>
-
-      <SignInButton session={session} />
-    </nav>
+        <SignInButton session={session} />
+      </nav>
+    </div>
   )
 }
 

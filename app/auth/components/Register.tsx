@@ -11,42 +11,6 @@ const Register = () => {
 
   const [error, setError] = useState("");
 
-  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault()
-
-  //   // 😞
-  //   const email = e.currentTarget.elements[0].value
-  //   const pwd = e.currentTarget.elements[1].value
-  //   const confirmPwd = e.currentTarget.elements[2].value
-  //   const agree = e.currentTarget.elements[3].checked
-  //   const notify = e.currentTarget.elements[4].checked
-
-  //   if (pwd == confirmPwd) {
-
-  //     if (agree) {
-  //       axios.post('#', {
-  //         email,
-  //         password: pwd,
-  //         notify,
-  //       })
-  //       .then((res) => {
-  //         //
-  //       })
-  //       .catch((err) => {
-  //         //
-  //       })
-  //     }
-  //     else {
-  //       alert('Please agree with our terms of service blah blah')
-  //     }
-
-  //   }
-  //   else {
-  //     // feedback
-  //     alert('Password does not match')
-  //   }
-  // }
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -73,8 +37,6 @@ const Register = () => {
 
   return (
     <div className="mt-6 text-gray-500 font-light flex flex-col gap-2">
-      {error && <span className="text-red-500 text-xs">{error}</span>}
-
       <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
         {/* text input */}
         <div className="flex flex-col space-y-3">
@@ -109,6 +71,9 @@ const Register = () => {
             />
           </div>
         </div>
+
+        {/* TODO (HKim): couldn't see the error message. need to work on it later once next-auth works. */}
+        {error && <span className="text-red-500 text-xs">{error}</span>}
 
         {/* checkboxes */}
         <div className="flex flex-col gap-2">

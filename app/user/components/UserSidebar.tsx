@@ -4,11 +4,13 @@ import {
   MdOutlineDashboardCustomize,
   MdTag,
   MdOutlineImage,
+  MdOutlineCollections,
   // MdOutlineSettings,
   // MdOutlineLogout,
 } from "react-icons/md";
 import { BiEdit } from "react-icons/bi";
-import Link from 'next/link'
+import { RiImageEditLine } from "react-icons/ri";
+import Link from "next/link";
 
 // different option for creating side nav items
 // export type NavItem = {
@@ -29,8 +31,8 @@ function UserSidebar() {
       <nav className="md:sticky md:top-16">
         {/* side nav items */}
         {/* gallery */}
-        <Link href='/user/gallery'>
-          <div className="flex mb-2 justify-start items center gap-4 px-5 hover:bg-blue-900 p-2 rounded-sm group cursor-pointer hover:shadow-lg m-auto">
+        <Link href="/user/gallery">
+          <div className="flex mb-2 pt-2 justify-start items center gap-4 px-5 hover:bg-blue-900 py-1 rounded-sm group cursor-pointer">
             <MdOutlineSpaceDashboard className="text-2xl text-gray-600 group-hover:text-white" />
             <h3 className="text-base text-gray-800 group-hover:text-white font-semibold">
               My Gallery
@@ -38,9 +40,19 @@ function UserSidebar() {
           </div>
         </Link>
 
+        {/* asset */}
+        <Link href="/user/assets">
+          <div className="flex mb-2 pt-2 justify-start items center gap-4 px-5 hover:bg-blue-900 py-1 rounded-sm group cursor-pointer">
+            <MdOutlineCollections className="text-2xl text-gray-600 group-hover:text-white" />
+            <h3 className="text-base text-gray-800 group-hover:text-white font-semibold">
+              Assets
+            </h3>
+          </div>
+        </Link>
+
         {/* editor */}
-        <Link href='/user/editor'>
-          <div className="flex mb-2 justify-start items center gap-4 px-5 hover:bg-blue-900 p-2 rounded-sm group cursor-pointer hover:shadow-lg m-auto">
+        <Link href="/user/editor">
+          <div className="flex mb-2 pt-2 justify-start items center gap-4 px-5 hover:bg-blue-900 py-1 rounded-sm group cursor-pointer">
             <BiEdit className="text-2xl text-gray-600 group-hover:text-white" />
             <h3 className="text-base text-gray-800 group-hover:text-white font-semibold">
               Editor
@@ -48,9 +60,19 @@ function UserSidebar() {
           </div>
         </Link>
 
-        {/* canvas */}
-        <Link href='/user/canvas'>
+        {/* draft */}
+        <Link href="/user/draft">
           <div className="flex mb-2 justify-start items center gap-4 px-5 hover:bg-blue-900 p-2 rounded-sm group cursor-pointer hover:shadow-lg m-auto">
+            <RiImageEditLine className="text-2xl text-gray-600 group-hover:text-white" />
+            <h3 className="text-base text-gray-800 group-hover:text-white font-semibold">
+              Draft
+            </h3>
+          </div>
+        </Link>
+
+        {/* canvas */}
+        <Link href="/user/canvas">
+          <div className="flex mb-2 pt-2 justify-start items center gap-4 px-5 hover:bg-blue-900 py-1 rounded-sm group cursor-pointer">
             <MdOutlineDashboardCustomize className="text-2xl text-gray-600 group-hover:text-white" />
             <h3 className="text-base text-gray-800 group-hover:text-white font-semibold">
               Canvas
@@ -59,8 +81,8 @@ function UserSidebar() {
         </Link>
 
         {/* tags */}
-        <Link href='#'>
-          <div className="flex mb-2 justify-start items center gap-4 px-5 hover:bg-blue-900 p-2 rounded-sm group cursor-pointer hover:shadow-lg m-auto">
+        <Link href="#">
+          <div className="flex mb-2 pt-2 justify-start items center gap-4 px-5 hover:bg-blue-900 py-1 rounded-sm group cursor-pointer">
             <MdTag className="text-2xl text-gray-600 group-hover:text-white" />
             <h3 className="text-base text-gray-800 group-hover:text-white font-semibold">
               Tags
@@ -69,8 +91,8 @@ function UserSidebar() {
         </Link>
 
         {/* background */}
-        <Link href='#'>
-          <div className="flex mb-2 justify-start items center gap-4 px-5 hover:bg-blue-900 p-2 rounded-sm group cursor-pointer hover:shadow-lg m-auto">
+        <Link href="#">
+          <div className="flex mb-2 pt-2 justify-start items center gap-4 px-5 hover:bg-blue-900 py-1 rounded-sm group cursor-pointer">
             <MdOutlineImage className="text-2xl text-gray-600 group-hover:text-white" />
             <h3 className="text-base text-gray-800 group-hover:text-white font-semibold">
               Background

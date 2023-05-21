@@ -20,6 +20,7 @@
     "cloudinary": "^1.36.4",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.1",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.1.0",
     "multer": "^1.4.5-lts.1",
     "next": "13.4.1",
@@ -35,6 +36,7 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.2"
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^9.0.2"
   }
 }

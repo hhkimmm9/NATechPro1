@@ -1,35 +1,48 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import Image from 'next/image'
-import { signIn, signOut, useSession, getProviders } from 'next-auth/react'
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { signIn, getProviders } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const router = useRouter();
   const [emailInput, setEmailInput] = useState('')
   const [pwdInput, setPwdInput] = useState('')
   const [rememberMe, setRememberMe] = useState(false)
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const [error, setError] = useState("");
 
-    const email = e.currentTarget.elements[0].value
-    const pwd = e.currentTarget.elements[1].value
-    const rememberMe = e.currentTarget.elements[2].checked
 
-    if (rememberMe) {
-      // 🍪
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await signIn("credentials", {
+        redirect: false,
+        email: emailInput,
+        password: pwdInput,
+      });
+
+      if (!response?.error) {
+        router.push("/");
+      } else {
+        const err = JSON.parse(response.error);
+        setError(err.message);
+        console.log(err);
+      }
+    } catch (err: any) {
+      console.log(JSON.stringify(err));
     }
+  };
 
-    axios.post('/api/login', {
-      email,
-      password: pwdInput
-    })
-    .then(res => {
-      // 
-    })
-    .catch(err => {
-      // 
-    })
-  }
+  const googleSignIn = async () => {
+    try {
+      await signIn("google", {
+        redirect: true,
+        callbackUrl: "/",
+      });
+    } catch (err: any) {
+      console.log(JSON.stringify(err));
+    }
+  };
 
   const [providers, setProviders] = useState<any>(null)
 
@@ -53,7 +66,7 @@ const Login = () => {
           />
           <span>Continue with Facebook</span>
         </button>
-        <button className='py-2 pl-4 pr-8 border-2 border-gray-300 rounded-full text-center whitespace-nowrap flex gap-2 items-center'>
+        <button className='py-2 pl-4 pr-8 border-2 border-gray-300 rounded-full text-center whitespace-nowrap flex gap-2 items-center' onClick={googleSignIn}>
           <Image src="/images/logos/google-logo.png" alt="Google Logo"
             width={20} height={20} className='object-contain'
           />
@@ -75,6 +88,7 @@ const Login = () => {
       </div>
 
       <div className='text-gray-500 font-light flex flex-col gap-2'>
+      {error && <span className='text-red-500 text-xs'>{error}</span>}
         <form onSubmit={handleSubmit} className='flex flex-col space-y-4'>
           {/* text input */}
           <div className='flex flex-col space-y-3'>
@@ -94,7 +108,7 @@ const Login = () => {
             <label> Remember me </label>
           </div>
 
-          <button type='submit' onClick={() => signIn}
+          <button type='submit'
             className='bg-sky-600 w-min py-2 px-6 whitespace-nowrap rounded-full text-white hover:bg-sky-500 mx-auto'
           > Log in </button>
         </form>

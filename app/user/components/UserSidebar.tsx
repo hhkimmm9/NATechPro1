@@ -91,8 +91,8 @@ function UserSidebar() {
         </Link>
 
         {/* background */}
-        <Link href="#">
-          <div className="flex mb-2 pt-2 justify-start items center gap-4 px-5 hover:bg-blue-900 py-1 rounded-sm group cursor-pointer">
+        <Link href='/user/background-gallery'>
+          <div className="flex mb-2 justify-start items center gap-4 px-5 hover:bg-blue-900 p-2 rounded-sm group cursor-pointer hover:shadow-lg m-auto">
             <MdOutlineImage className="text-2xl text-gray-600 group-hover:text-white" />
             <h3 className="text-base text-gray-800 group-hover:text-white font-semibold">
               Background

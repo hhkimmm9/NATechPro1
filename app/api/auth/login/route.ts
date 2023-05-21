@@ -6,7 +6,7 @@ import { signJwtAccessToken } from "@/app/backend/utils/jwt";
 
 export async function POST(req: Request) {
   const body: Iuser = await req.json();
-
+  
   try {
     await connectMongoDB();
     const { email, password } = body;
@@ -36,7 +36,7 @@ export async function POST(req: Request) {
       ...userWithoutPass,
       accessToken,
     };
-
+    console.log(user)
     return new Response(JSON.stringify(user));
   } catch (err: any) {
     return new Response(err.message, { status: 500 });

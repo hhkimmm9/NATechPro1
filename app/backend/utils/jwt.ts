@@ -24,3 +24,17 @@ export function verifyJwt(token: string) {
     return null;
   }
 }
+
+
+
+// helper 
+export function extractTokenAndVerify(req: Request) {
+    // verify token and extract userID
+    const accessToken = req.headers.get("authorization");
+    const token = accessToken?.split(' ')[1];
+    const decodedToken = verifyJwt(token || "");
+    if (!accessToken || !decodedToken) {
+        return null;
+    }
+    return decodedToken
+}

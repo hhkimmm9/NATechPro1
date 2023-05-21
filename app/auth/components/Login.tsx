@@ -83,7 +83,6 @@ const Login = () => {
             </div>
           </div>
 
-          {/* TODO (HKim): couldn't see the error message. need to work on it later once next-auth works. */}
           {error && <span className="text-red-500 text-xs font-semibold">{error}</span>}
 
           {/* checkboxes */}

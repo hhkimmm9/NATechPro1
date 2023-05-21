@@ -36,7 +36,7 @@ export async function POST(req: Request) {
       ...userWithoutPass,
       accessToken,
     };
-    console.log(user)
+    // console.log(user)
     return new Response(JSON.stringify(user));
   } catch (err: any) {
     return new Response(err.message, { status: 500 });

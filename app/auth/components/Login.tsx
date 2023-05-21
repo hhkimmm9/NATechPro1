@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
-import { signIn, getProviders } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const Login = () => {
@@ -8,7 +8,6 @@ const Login = () => {
   const [emailInput, setEmailInput] = useState('');
   const [pwdInput, setPwdInput] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const [providers, setProviders] = useState<any>(null);
 
   const [error, setError] = useState("");
 
@@ -48,16 +47,6 @@ const Login = () => {
     }
   };
 
-  useEffect(() => {
-    const initProviders = async () => {
-      const response = await getProviders()
-
-      setProviders(response)
-    }
-
-    initProviders()
-  },[])
-
   return (
     <div className='flex flex-col space-y-8 mt-6'>
       {/* oauth */}
@@ -95,7 +84,7 @@ const Login = () => {
           </div>
 
           {/* TODO (HKim): couldn't see the error message. need to work on it later once next-auth works. */}
-          {error && <span className="text-red-500 text-xs">{error}</span>}
+          {error && <span className="text-red-500 text-xs font-semibold">{error}</span>}
 
           {/* checkboxes */}
           <div className='flex gap-2'>

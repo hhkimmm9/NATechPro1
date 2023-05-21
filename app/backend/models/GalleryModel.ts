@@ -9,14 +9,19 @@ export interface IGallery {
 export const GallerySchema = new Schema(
     {   name: {
             type: String,
-            require: true
+            required: true
         },
         image: {
             type: String,
-            require: true
+            required: true
+        },
+        authorID: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true
         }
     },
-    { collection: 'gallery' }
+    { timestamps: true }
 );
 
 const Gallery = models.Gallery || model("Gallery", GallerySchema);

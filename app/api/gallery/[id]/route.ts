@@ -18,6 +18,7 @@ export const GET = async (req: Request, { params }: { params: { id: string } } )
         // user verified, get gallery
         const gallery = await Gallery.findById(params.id)
         if (!gallery) return new Response(`Gallery id:${params.id} not found`)
+        // check if user is the author
         if (gallery?.userID?.toString() !== decodedToken._id.toString()) return new Response("Not the author", { status: 403 })
 
         return new Response(JSON.stringify(gallery), { status: 200 })
@@ -42,9 +43,9 @@ export const PATCH = async (req:Request, { params }: { params: { id: string } } 
         if (!accessToken || !decodedToken) return new Response("Unauthorized (wrong or expired token)", { status: 403 });
 
         // user verified, update gallery 
-        // check if user is the author
         const gallery = await Gallery.findById(params.id)
         if (!gallery) return new Response(`Gallery id:${params.id} not found`)
+        // check if user is the author
         if (gallery?.userID?.toString() !== decodedToken._id.toString()) return new Response("Not the author", { status: 403 })
 
         // update gallery
@@ -71,9 +72,9 @@ export const DELETE = async (req:Request, { params }: { params: { id: string } }
         if (!accessToken || !decodedToken) return new Response("Unauthorized (wrong or expired token)", { status: 403 });
 
         // user verified, delete gallery
-        // check if user is the author 
         const gallery = await Gallery.findById(params.id)
         if (!gallery) return new Response(`Gallery id:${params.id} not found`)
+        // check if user is the author 
         if (gallery?.userID?.toString() !== decodedToken._id.toString()) return new Response("Not the author", { status: 403 })
 
         // delete gallery

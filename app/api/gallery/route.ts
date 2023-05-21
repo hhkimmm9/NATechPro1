@@ -52,7 +52,6 @@ export const POST = async (req: Request) => {
         const token = accessToken?.split(' ')[1];
         const decodedToken = verifyJwt(token || "");
         if (!accessToken || !decodedToken) return new Response("Unauthorized (wrong or expired token)", { status: 403 });
-        const userID = decodedToken._id;
 
         // user verified, create gallery for that user 
         const body: IGallery = await req.json();

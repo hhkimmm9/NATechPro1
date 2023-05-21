@@ -1,5 +1,4 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
-import Gallery from "@/models/GalleryModel"
 
 interface SignOption {
   expiresIn?: string | number;

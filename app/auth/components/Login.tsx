@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 
 const Login = () => {
   const router = useRouter();
-  const [emailInput, setEmailInput] = useState('')
-  const [pwdInput, setPwdInput] = useState('')
-  const [rememberMe, setRememberMe] = useState(false)
+  const [emailInput, setEmailInput] = useState('');
+  const [pwdInput, setPwdInput] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [providers, setProviders] = useState<any>(null);
 
   const [error, setError] = useState("");
-
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,6 +30,10 @@ const Login = () => {
       }
     } catch (err: any) {
       console.log(JSON.stringify(err));
+    } finally {
+      if (rememberMe == true) {
+        // cookie
+      }
     }
   };
 
@@ -43,8 +47,6 @@ const Login = () => {
       console.log(JSON.stringify(err));
     }
   };
-
-  const [providers, setProviders] = useState<any>(null)
 
   useEffect(() => {
     const initProviders = async () => {
@@ -72,24 +74,14 @@ const Login = () => {
           />
           <span>Continue with Google</span>
         </button>
-
-        {/* from next-auth */}
-        {/* <div>
-          {providers && Object.values(providers).map((provider: any) => (
-            <button type='button' key={provider.name} onClick={() => signIn(provider.id)}>
-              provider
-            </button>
-          ))}
-        </div> */}
       </div>
 
       <div className='mx-auto text-gray-500 font-light flex flex-row items-center gap-2'>
         <hr className='w-60'/><p>or</p><hr className='w-60'/>
       </div>
 
-      <div className='text-gray-500 font-light flex flex-col gap-2'>
-      {error && <span className='text-red-500 text-xs'>{error}</span>}
-        <form onSubmit={handleSubmit} className='flex flex-col space-y-4'>
+      <div className="text-gray-500 font-light flex flex-col gap-2">
+        <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
           {/* text input */}
           <div className='flex flex-col space-y-3'>
             <div className='flex flex-col'>
@@ -101,6 +93,9 @@ const Login = () => {
               <input type="text" value={pwdInput} onChange={e => setPwdInput(e.target.value)} className='border p-1.5'/>
             </div>
           </div>
+
+          {/* TODO (HKim): couldn't see the error message. need to work on it later once next-auth works. */}
+          {error && <span className="text-red-500 text-xs">{error}</span>}
 
           {/* checkboxes */}
           <div className='flex gap-2'>

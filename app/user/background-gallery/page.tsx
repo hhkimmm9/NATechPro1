@@ -104,7 +104,7 @@ const page = () => {
     let handler = (e: any) => {
       if (!dropdownRef.current.contains(e.target)) {
         setShowDropdown(false)
-        console.log(dropdownRef.current)
+        // console.log(dropdownRef.current)
       }
     }
 

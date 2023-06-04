@@ -6,8 +6,9 @@ import { verifyJwt } from "@/utils/jwt"
  *  get all galleries created by a specific user                      
  *  user is authenticated by verifying bearer token that is sent under headers
  * 
- *  or you can add query params to filter out galleries by tags
- *  http:/localhost:3000/api/gallery?tags=apple,banana
+ *  or you can add query params to filter out galleries by name/tags
+ *  {{URL}}/api/gallery?name=998&tags=bottle
+ *  get the requested user gallery where name begins with 998 and tags include bottle
  */
 export const GET = async (req:Request) => {
     await connectMongoDB();
@@ -23,12 +24,15 @@ export const GET = async (req:Request) => {
         // user verified, get all galleries by that user 
         // req params - tags
         const url = new URL(req.url);
-        const tags = url.searchParams.get("tags")
+        const name = url.searchParams.get("name");
+        const tags = url.searchParams.get("tags");
         const tagsArray = tags ? tags.split(',') : [];
+        
 
         const query = { 
             userID: { $in: userID },
-            ...(tags ? { tags: { $in: tagsArray } } : {})
+            ...(tags ? { tags: { $in: tagsArray } } : {}),                      // includes tag 
+            ...(name ? { name: { $regex: `^${name}`, $options: "i" } } : {}),   // begins with name, case insensitive
         }
 
         const galleries = await Gallery.find(query).sort({"updatedAt":-1});

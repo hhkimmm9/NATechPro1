@@ -2,8 +2,8 @@ import mongoose, { Schema, model, models } from "mongoose";
 
 export interface ITag {
     label: string
-    image_id: string
-    user_id: string
+    userID: Schema.Types.ObjectId,
+    images: Schema.Types.ObjectId
 }
 
 export const TagSchema = new Schema(
@@ -12,7 +12,8 @@ export const TagSchema = new Schema(
             require: true
         },
         user_id: {
-            type: String,
+            type: Schema.Types.ObjectId,
+            ref: "User",
             require: true
         },
         images: [

@@ -4,7 +4,9 @@ import Image from 'next/image'
 const Card = ({ imgSrc }: { imgSrc: string }) => {
   return (
     <>
-      <Image src={imgSrc} alt='' width={1920} height={1080} className='object-cover' />
+      <Image src={imgSrc} alt='Card Image' width={384} height={288}
+        className='object-contain shadow w-96 h-72'
+      />
     </>
   )
 }

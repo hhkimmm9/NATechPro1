@@ -10,7 +10,7 @@ const nextConfig = {
   },
   reactStrictMode: true,
   images: {
-    domains: ['i.natgeofe.com'],
+    domains: ['i.natgeofe.com', 'res.cloudinary.com'],
   },
 };
 

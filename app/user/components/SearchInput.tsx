@@ -1,4 +1,6 @@
-const SearchInput = ({ value='', placeholder='Search Image', type='text', onChange }: { value: string, placeholder: string, type: string, onChange: any}) => {
+const SearchInput = (
+    { value='', placeholder='Search Image', type='text', onChange }: { value?: string, placeholder?: string, type?: string, onChange: any}
+  ) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value)

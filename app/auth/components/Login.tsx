@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const Login = () => {
   const router = useRouter();
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get('callbackUrl') || '/'
   const [emailInput, setEmailInput] = useState('');
   const [pwdInput, setPwdInput] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -21,7 +23,7 @@ const Login = () => {
       });
 
       if (!response?.error) {
-        router.push("/");
+        router.push(callbackUrl);
       } else {
         const err = JSON.parse(response.error);
         setError(err.message);
@@ -40,7 +42,7 @@ const Login = () => {
     try {
       await signIn("google", {
         redirect: true,
-        callbackUrl: "/",
+        callbackUrl: callbackUrl,
       });
     } catch (err: any) {
       console.log(JSON.stringify(err));

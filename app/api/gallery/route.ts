@@ -1,30 +1,38 @@
 import Gallery, { IGallery } from "@/models/GalleryModel"
 import { connectMongoDB } from "@/config/db"
+import { verifyJwt } from "@/utils/jwt"
 
 /* [GET] http:/localhost:3000/api/gallery  
- *  get all galleries                     
- *  
- *  or you can add query params to filter out galleries
- *  http:/localhost:3000/api/gallery?userID=64698ab60ffd0266b0c3dc89&tags=apple,banana
+ *  get all galleries created by a specific user                      
+ *  user is authenticated by verifying bearer token that is sent under headers
+ * 
+ *  or you can add query params to filter out galleries by name/tags
+ *  {{URL}}/api/gallery?name=998&tags=bottle
+ *  get the requested user gallery where name begins with 998 and tags include bottle
  */
 export const GET = async (req:Request) => {
     await connectMongoDB();
 
-    // const accessToken = req.headers.get("authorization");
-    // const token - accessToken?.split(' ')[1];
-    // const decodedToken = verifyJwtToken(token);
-    // if (!accessToken || !decodedToken) {
-        // return new Response("Unauthorized (wrong or expired token", {status:403});
-    // }
-
     try {
+        // verify token and extract userID
+        const accessToken = req.headers.get("authorization");
+        const token = accessToken?.split(' ')[1];
+        const decodedToken = verifyJwt(token || "");
+        if (!accessToken || !decodedToken) return new Response("Unauthorized (wrong or expired token)", { status: 403 });
+        const userID = decodedToken._id;
+
+        // user verified, get all galleries by that user 
+        // req params - tags
         const url = new URL(req.url);
-        const tags = url.searchParams.get("tags")
+        const name = url.searchParams.get("name");
+        const tags = url.searchParams.get("tags");
         const tagsArray = tags ? tags.split(',') : [];
+        
 
         const query = { 
-            userID: { $in: url.searchParams.get("userID") },
-            ...(tags ? { tags: { $in: tagsArray } } : {})
+            userID: { $in: userID },
+            ...(tags ? { tags: { $in: tagsArray } } : {}),                      // includes tag 
+            ...(name ? { name: { $regex: `^${name}`, $options: "i" } } : {}),   // begins with name, case insensitive
         }
 
         const galleries = await Gallery.find(query).sort({"updatedAt":-1});
@@ -43,6 +51,13 @@ export const POST = async (req: Request) => {
     await connectMongoDB();
 
     try {
+        // verify token and extract userID
+        const accessToken = req.headers.get("authorization");
+        const token = accessToken?.split(' ')[1];
+        const decodedToken = verifyJwt(token || "");
+        if (!accessToken || !decodedToken) return new Response("Unauthorized (wrong or expired token)", { status: 403 });
+
+        // user verified, create gallery for that user 
         const body: IGallery = await req.json();
         const gallery = await Gallery.create(body);
         return new Response("Gallery created", { status: 200 });

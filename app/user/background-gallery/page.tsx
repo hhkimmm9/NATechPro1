@@ -5,7 +5,7 @@ import { useDropzone } from 'react-dropzone'
 import axios from 'axios'
 import Card from '../components/Card'
 import SearchInput from '../components/SearchInput'
-// import { useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { IGallery } from '@/backend/models/GalleryModel'
 
 const page = () => {
@@ -18,8 +18,8 @@ const page = () => {
   const [dropdownType, setDropdownType] = useState('')
   const [showDropdown, setShowDropdown] = useState(false)
   
-  // const { data: session, status } = useSession()
-  // const userID = session
+  const { data: session, status } = useSession()
+  const userID = session?.user.id;
 
   const MyDropzone = () => {
     const onDrop = useCallback((acceptedFiles: any) => {
@@ -53,7 +53,10 @@ const page = () => {
   // beforeMount
   useEffect(() => {
     const getImgs = async () => {
-      await axios.get('/api/gallery?userID=646a626d6dcde576a25d584d')
+      // await axios.get('/api/gallery?userID=646a626d6dcde576a25d584d')
+      await axios.get(`/api/gallery?userID=${userID}`, {
+        headers: { 'authorization': `Bearer ${session?.user.accessToken}` },
+      })
         .then(({ data }) => {
           setImagesToShow(data)
         })

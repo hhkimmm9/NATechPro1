@@ -13,7 +13,7 @@ const SignInButton = ({session} : any) => {
   if (session && session.user) {
     return (
       <>
-        <button type="button" className="flex gap-4 items-right items-center" onClick={() => setShowDropdown((prev) => !prev)}>
+        <button type="button" className="flex gap-4 justify-end items-center" onClick={() => setShowDropdown((prev) => !prev)}>
           <Image
             src={"https://i.natgeofe.com/n/548467d8-c5f1-4551-9f58-6817a8d2c45e/NationalGeographic_2572187_square.jpg"}
             height={36}

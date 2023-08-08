@@ -6,6 +6,11 @@ const nextConfig = {
   },
   webpack(config) {
     config.experiments = { ...config.experiments, topLevelAwait: true };
+    config.module.rules.push({
+      test: /\.node$/,
+
+      loader: "node-loader",
+    })
     return config;
   },
   reactStrictMode: true,

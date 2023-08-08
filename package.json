@@ -17,9 +17,13 @@
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "bcryptjs": "^2.4.3",
+    "canvas": "^2.11.2",
     "cloudinary": "^1.36.4",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.1",
+    "fabric": "^5.3.0",
+    "fabricjs-react": "^1.2.0",
+    "jsdom": "^22.1.0",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.1.0",
     "multer": "^1.4.5-lts.1",
@@ -30,11 +34,12 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-icons": "^4.8.0",
-    "tailwindcss": "3.3.2",
-    "typescript": "5.0.4"
+    "tailwindcss": "3.3.2"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
-    "@types/jsonwebtoken": "^9.0.2"
+    "@types/fabric": "^5.3.3",
+    "@types/jsonwebtoken": "^9.0.2",
+    "node-loader": "^2.0.0"
   }
 }

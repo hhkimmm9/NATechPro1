@@ -51,7 +51,7 @@ export default function Test() {
         <div>
             <input type="text" name="name" onChange={(e) => setName(e.target.value)}/>
             <input type="file" name="image" onChange={generateImagePreview}/>
-            <img src={imagePreview} style={{maxWidth: '500px', maxHeight:'200px'}}/>
+            {/* <img src={imagePreview} style={{maxWidth: '500px', maxHeight:'200px'}}/> */}
             <button onClick={handleFile}>Create Gallery</button>
 
         </div>

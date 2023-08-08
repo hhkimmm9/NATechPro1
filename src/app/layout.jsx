@@ -28,7 +28,7 @@ export default function RootLayout({
           {/* <!-- onnxruntime-web --> */}
           <script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
           {/* <!-- opencv --> */}
-          <script async src="https://docs.opencv.org/3.4/opencv.js"></script>
+          <script src="https://docs.opencv.org/3.4/opencv.js"></script>
           <script src="/client/script/init.js" type="module"></script>
           <script src="/client/script/numpy.js"></script>
         </head>

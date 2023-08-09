@@ -18,7 +18,6 @@ const BackgroundImagesPage = () => {
   const [showDropdown, setShowDropdown] = useState(false)
   
   const { data: session, status } = useSession()
-  const userID = session?.user.id;
 
   const MyDropzone = () => {
     const onDrop = useCallback((acceptedFiles) => {
@@ -56,7 +55,7 @@ const BackgroundImagesPage = () => {
   useEffect(() => {
     const getImgs = async () => {
       // await axios.get('/api/gallery?userID=646a626d6dcde576a25d584d')
-      await axios.get(`/api/gallery?userID=${userID}`, {
+      await axios.get(`/api/gallery?userID=${session?.user.id}`, {
         headers: { 'authorization': `Bearer ${session?.user.accessToken}` },
       })
         .then(({ data }) => {
@@ -75,7 +74,7 @@ const BackgroundImagesPage = () => {
     }
     // add a listener to the dropdown
     document.addEventListener("mousedown", handler)
-  }, [])
+  }, [session])
 
   // tab change
   useEffect(() => {

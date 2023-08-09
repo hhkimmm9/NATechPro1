@@ -13,7 +13,6 @@ export default function GalleryPage() {
   const { data: session, status } = useSession({ required: true });
 
   useEffect(() => {
-    if (!session?.data) return;
     const getImgs = async () => {
       const config = {
         headers: {

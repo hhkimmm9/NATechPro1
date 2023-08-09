@@ -27,7 +27,7 @@ export default function GalleryPage() {
     };
     // fetch images from the server
     getImgs();
-  }, []);
+  }, [session]);
 
   return (
     <div className="p-5 flex flex-col h-full">

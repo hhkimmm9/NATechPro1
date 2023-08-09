@@ -18,7 +18,7 @@ export default function EditorPage() {
 
   // const IMAGE_PATH = "/assets/data/truck.jpg";
   const IMAGE_EMBEDDING = "/assets/data/truck_embedding.npy"
-  const MODEL_DIR = "/assets/model/sam_onnx_quantized.onnx"
+  const MODEL_DIR = "/assets/models/sam_onnx_quantized.onnx"
 
   const [imageUrl, setIamgeUrl] = useState('')
   const [model, setModel] = useState(null) // ONNX model

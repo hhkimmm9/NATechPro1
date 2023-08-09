@@ -14,6 +14,7 @@ const nextConfig = {
 
       loader: "node-loader",
     })
+    // https://onnxruntime.ai/docs/tutorials/web/classify-images-nextjs-github-template.html
     config.plugins.push(
       new NodePolyfillPlugin(), 
       new CopyPlugin({

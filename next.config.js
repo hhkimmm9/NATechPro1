@@ -10,11 +10,11 @@ const nextConfig = {
   },
   webpack(config) {
     config.experiments = { ...config.experiments, topLevelAwait: true };
-    config.module.rules.push({
-      test: /\.node$/,
+    // config.module.rules.push({
+    //   test: /\.node$/,
 
-      loader: "node-loader",
-    })
+    //   loader: "node-loader",
+    // })
     // https://onnxruntime.ai/docs/tutorials/web/classify-images-nextjs-github-template.html
     config.plugins.push(
       new NodePolyfillPlugin(), 

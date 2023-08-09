@@ -6,13 +6,13 @@ import AppContextProvider from "./hooks/context";
 
 const Provider = ({ children, session }) => {
   return (
-    <SessionProvider session={session}>
-      <AppContextProvider>
+    <AppContextProvider>
+      <SessionProvider session={session}>
         <NextUIProvider>
           { children }
         </NextUIProvider>
-      </AppContextProvider>
-    </SessionProvider>
+      </SessionProvider>
+    </AppContextProvider>
   )
 }
 

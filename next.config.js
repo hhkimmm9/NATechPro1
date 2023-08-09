@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const webpack = require("webpack");
 
 const nextConfig = {
   experimental: {
@@ -33,6 +34,9 @@ const nextConfig = {
           // },
         ],
       }),
+      new webpack.DefinePlugin({
+        'process.versions': JSON.stringify(process.versions),
+      })
     );
     return config;
   },

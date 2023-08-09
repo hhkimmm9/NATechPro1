@@ -13,21 +13,21 @@ export default function GalleryPage() {
   const { data: session, status } = useSession({ required: true });
 
   useEffect(() => {
-    const getImgs = async () => {
-      const config = {
-        headers: {
-          // authorization: "secretJWT",
-          authorization: `Bearer ${session?.data.user.accessToken}`,
-        },
+    if (status === 'authenticated') {
+      const getImgs = async () => {
+        await axios.get("/api/gallery", {
+          headers: {
+            authorization: `Bearer ${session?.user.accessToken}`,
+          },
+        }).then(({ data }) => {
+          // console.log(data);
+          setImagesToShow(data);
+        });
       };
-      await axios.get("/api/gallery", config).then(({ data }) => {
-        console.log(data);
-        setImagesToShow(data);
-      });
-    };
-    // fetch images from the server
-    getImgs();
-  }, [session]);
+      // fetch images from the server
+      getImgs();
+    }
+  }, [status]);
 
   return (
     <div className="p-5 flex flex-col h-full">

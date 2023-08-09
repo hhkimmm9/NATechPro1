@@ -209,7 +209,7 @@ const BackgroundImagesPage = () => {
             { MyDropzone() }
 
             {/* images loaded from the server */}
-            { imagesToShow?.map(item => <Card imgSrc={item.image} />) }
+            { imagesToShow?.map(item => <Card key={item._id} imgSrc={item.image} />) }
           </div>
 
           {/* TODO: pagination */}

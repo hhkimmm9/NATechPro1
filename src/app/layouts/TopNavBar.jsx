@@ -14,10 +14,30 @@ const TopNavBar = () => {
 
   return (
     <>
-      <nav className="w-full z-10 px-8 py-2 min-h-[64px] border-b-2 items-center grid grid-cols-4 gap-8 bg-neutral-100">
+      <nav className="
+        w-full
+        min-h-[64px]
+        z-10
+        px-8
+        py-2
+        grid
+        grid-cols-4
+        gap-8
+        items-center
+        border-b-2
+      bg-neutral-100
+      ">
         <Logo />
 
-        <div className='col-start-2 col-span-2 col-end-4 flex justify-around text-lg font-medium'>
+        <div className='
+          col-start-2
+          col-span-2
+          col-end-4
+          flex
+          justify-around
+          text-lg
+          font-medium
+        '>
           <Link href="/" className={`text-black hover:underline
             ${pathname === '/' ? 'font-bold' : ''}`
           }>Home</Link>

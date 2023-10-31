@@ -17,21 +17,33 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Provider>
-          <div className='flex flex-col relative min-h-screen'>
-            <div className='fixed top-0 left-0 right-0'>
-              <TopNavBar />
-            </div>
+        <div className='hidden md:block'>
+          <Provider>
+            <div className='flex flex-col relative min-h-screen'>
+              <div className='fixed top-0 left-0 right-0'>
+                <TopNavBar />
+              </div>
 
-            <div className='mt-16 mb-48'>
-              { children }
-            </div>
+              <div className='mt-16 mb-48'>
+                { children }
+              </div>
 
-            <div className='absolute bottom-0 left-0 right-0'>
-              <Footer/>
+              <div className='absolute bottom-0 left-0 right-0'>
+                <Footer/>
+              </div>
             </div>
-          </div>
-        </Provider>
+          </Provider>
+        </div>
+        <div className='
+          h-screen
+          text-center
+          flex
+          flex-col
+          justify-center
+          md:hidden
+        '>
+          <p className='text-2xl'>NO SUPPORT DEVICES WITH LESS THAN 768 PX IN LENGTH.</p>
+        </div>
       </body>
     </html>
   );

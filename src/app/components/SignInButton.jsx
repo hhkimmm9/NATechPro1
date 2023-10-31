@@ -4,12 +4,14 @@ import React, { useState, useEffect, useRef } from "react";
 import Link from 'next/link'
 import { Text } from "@nextui-org/react";
 import { usePathname } from 'next/navigation'
+import { useSession } from "next-auth/react"
 
-const SignInButton = ({session}) => {
+const SignInButton = () => {
   const pathname = usePathname()
   
   const dropdownRef = useRef()
   const [showDropdown, setShowDropdown] = useState(false);
+  const { data: session } = useSession();
 
   useEffect(() => {
     let showDropdownHandler = (e) => {
@@ -20,6 +22,7 @@ const SignInButton = ({session}) => {
     document.addEventListener("mousedown", showDropdownHandler)
   })
 
+  // signed in users
   if (session && session.user) {
     return (
       <>
@@ -56,15 +59,24 @@ const SignInButton = ({session}) => {
       </>
     );
   }
+
+  // guest users
   return (
     <>
       { pathname !== '/auth' &&
-        <div className='flex gap-2 justify-end'>
+        <div className='grid grid-cols-2 gap-3 justify-end'>
           {/* sign in */}
           <button
             className='
-              border border-sky-600 rounded-2xl py-2 px-6 font-semibold text-sky-600 whitespace-nowrap
-              hover:bg-sky-50
+              px-3
+              py-1
+              rounded-full
+              border
+            border-sky-600
+              whitespace-nowrap
+              font-semibold
+            text-sky-600
+            hover:bg-sky-50
             '
             onClick={() => signIn()}
           >  Sign in </button>
@@ -73,8 +85,14 @@ const SignInButton = ({session}) => {
           {/* sign up */}
           <Link href='/auth?tab=register'
             className='
-              bg-sky-500 rounded-2xl py-2 px-6 font-semibold text-white whitespace-nowrap
-              hover:bg-sky-600
+              px-3
+              py-1
+              rounded-full
+            bg-sky-500
+              whitespace-nowrap
+              font-semibold
+            text-white
+            hover:bg-sky-400
             '
           > Sign up </Link>
         </div>

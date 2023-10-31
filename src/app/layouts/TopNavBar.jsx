@@ -1,8 +1,8 @@
 "use client";
 
-import SignInButton from "./SignInButton"
+import SignInButton from "../components/SignInButton"
 import React from 'react'
-import Logo from './Logo'
+import Logo from '../components/Logo'
 import Link from 'next/link'
 import { useSession } from "next-auth/react"
 import { usePathname } from "next/navigation";

@@ -11,6 +11,7 @@ export const authOptions = {
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       async profile(profile) {
+        // Even if we use oAuth we still store user info into our database.
         const res = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/oAuth/`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },

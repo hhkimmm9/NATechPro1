@@ -18,7 +18,6 @@ const LoginPage = () => {
   // reactive to the remember me checkbox
   // .... 이거 로그인 버튼 눌렸을 ㄸㅐ만..
   useEffect(() => {
-    console.log(rememberMe)
     if (rememberMe && emailInput) {
       localStorage.setItem("rememberUserId", emailInput)
     }
@@ -109,7 +108,7 @@ const LoginPage = () => {
       <div className="my-6 flex flex-col gap-2 text-gray-500 font-light">
         <form onSubmit={handleSubmit}>
           {/* text input */}
-          <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-3">
             {/* email */}
             <div className="flex flex-col space-y-1">
               <label> Email </label>
@@ -142,6 +141,7 @@ const LoginPage = () => {
             <label> Remember me </label>
           </div>
 
+          {/* TODO: Move the error section beside the labels in the login form for better visual alignment. */}
           <div className="h-6">
             { error && (
               <span className="text-xs font-medium text-red-600">{ error }</span>

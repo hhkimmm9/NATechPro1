@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { signIn } from "next-auth/react";
+import Link from "next/link";
 
 const RegisterPage = () => {
   const [emailInput, setEmailInput] = useState("");
@@ -37,19 +38,19 @@ const RegisterPage = () => {
 
   return (
     <div className="mt-6 text-gray-500 font-light flex flex-col gap-2">
-      <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+      <form onSubmit={handleSubmit}>
         {/* text input */}
         <div className="flex flex-col space-y-3">
-          <div className="flex flex-col">
+          <div className="flex flex-col space-y-1">
             <label>Email</label>
             <input
               type="text"
               value={emailInput}
               onChange={(e) => setEmailInput(e.target.value)}
-              className="border p-1.5"
+              className="p-1.5 border rounded-md"
             />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col space-y-1">
             <label className="whitespace-nowrap">
               {" "}
               Password <span>(6 Characters minimum)</span>{" "}
@@ -58,24 +59,29 @@ const RegisterPage = () => {
               type="password"
               value={pwdInput}
               onChange={(e) => setPwdInput(e.target.value)}
-              className="border p-1.5"
+              className="p-1.5 border rounded-md"
             />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col space-y-1">
             <label className="whitespace-nowrap"> Password confirmation </label>
             <input
               type="password"
               value={confirmPwdInput}
               onChange={(e) => setConfirmPwdInput(e.target.value)}
-              className="border p-1.5"
+              className="p-1.5 border rounded-md"
             />
           </div>
         </div>
 
-        {error && <span className="text-red-500 text-xs font-semibold">{error}</span>}
+        {/* TODO: Move the error section beside the labels in the registration form for better visual alignment. */}
+        <div className="h-6">
+          {error && (
+            <span className="text-red-500 text-xs font-semibold">{ error }</span>
+          )}
+        </div>
 
         {/* checkboxes */}
-        <div className="flex flex-col gap-2">
+        <div className="my-4 flex flex-col gap-2 justify-start">
           <div className="flex gap-2 items-start">
             <input
               type="checkbox"
@@ -85,49 +91,37 @@ const RegisterPage = () => {
             />
             <label className="text-sm">
               <span>I agree to the </span>
-              <a
-                href="#"
+              <Link href="#"
                 className="text-blue-500 hover:text-blue-600 hover:underline"
-              >
-                Terms of Service, General Terms and Conditions
-              </a>
+              >Terms of Service, General Terms and Conditions</Link>
               <span> and </span>
-              <a
-                href="#"
+              <Link href="#"
                 className="text-blue-500 hover:text-blue-600 hover:underline"
-              >
-                Privacy Policy
-              </a>
+              >Privacy Policy</Link>
               <span>.</span>
             </label>
           </div>
 
           <div className="flex gap-2">
-            <input
-              type="checkbox"
-              checked={notifyCheckbox}
+            <input type="checkbox" checked={notifyCheckbox}
               onChange={(e) => setNotifyCheckbox(e.target.checked)}
             />
             <label className="text-sm">
-              {" "}
-              Notify me about new features and special offers.{" "}
+              Notify me about new features and special offers.
             </label>
           </div>
         </div>
 
-        <button
-          type="submit"
-          className="bg-sky-600 w-min py-2 px-6 whitespace-nowrap rounded-full text-white hover:bg-sky-500 mx-auto"
-        >
-          {" "}
-          Sign up{" "}
-        </button>
+        <div className="w-min mx-auto flex flex-col">
+          <button type="submit"
+            className="bg-sky-600 w-min py-2 px-6 whitespace-nowrap rounded-full text-white hover:bg-sky-500 mx-auto"
+          > Sign up </button>
+        </div>
       </form>
 
-      <div className="w-4/5 mx-auto text-center">
-        <p className="text-xs">
-          This form is protected by hCaptcha and its Privacy Policy and Terms of
-          Service
+      <div className="mt-4">
+        <p className="text-center text-sm">
+          This form is protected by hCaptcha and its Privacy Policy and Terms of Service
         </p>
       </div>
     </div>

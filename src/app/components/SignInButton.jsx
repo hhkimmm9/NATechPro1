@@ -1,3 +1,5 @@
+"use client"
+
 import { signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
@@ -27,34 +29,49 @@ const SignInButton = () => {
     return (
       <>
         <div ref={dropdownRef} className="relative">
-          <button type="button" className="flex gap-4 items-right items-center" onClick={() => setShowDropdown((prev) => !prev)}>
-            <Image
-              src={"/images/default.png"}
-              height={2048}
-              width={1365}
-              alt="profile image"
-              className="w-8 h-8 object-contain rounded-full"
+          <button type="button" onClick={() => setShowDropdown((prev) => !prev)}
+            className="flex gap-3 items-center"
+          >
+            <Image src={"/images/default.png"} alt="profile image"
+              height={2048} width={1365}
+              className="w-8 h-8 rounded-full"
             />
-            <div className="flex flex-col text-lg justify-center">
-              <Text>{session?.user.email}</Text>
+            <div className="text-lg">
+              {/* Text? */}
+              <Text>{ session?.user.email }</Text>
             </div>
           </button>
           
-          { showDropdown && 
-            <div className='absolute w-44 top-14 left-0 right-0 border shadow rounded-lg bg-white'>
+          { showDropdown && (
+            <div className='
+              absolute top-14 left-0 right-0
+              w-44
+              border shadow rounded-lg bg-white
+            '>
               <ul>
-                <li onClick={() => setShowDropdown(false)} className='hover:underline cursor-pointer'>
+                {/* account */}
+                <li onClick={() => setShowDropdown(false)}
+                  className='hover:underline cursor-pointer'
+                >
                   <Link href='#' className='text-black'> Account </Link>
                 </li>
-                <li onClick={() => setShowDropdown(false)} className='hover:underline cursor-pointer'>
+
+                {/* settings */}
+                <li onClick={() => setShowDropdown(false)}
+                  className='hover:underline cursor-pointer'
+                >
                   <Link href='#' className='text-black'> Settings </Link>
                 </li>
-                <li onClick={() => { setShowDropdown(false); signOut(); }} className='hover:underline cursor-pointer'>
+
+                {/* sign out */}
+                <li onClick={() => { setShowDropdown(false); signOut(); }}
+                  className='hover:underline cursor-pointer'
+                >
                   Sign out
                 </li>
               </ul>
             </div>
-          }
+          )}
         </div>
       </>
     );

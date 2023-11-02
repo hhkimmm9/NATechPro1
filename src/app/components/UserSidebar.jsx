@@ -2,28 +2,14 @@ import React from "react";
 import {
   MdOutlineSpaceDashboard,
   MdOutlineDashboardCustomize,
-  MdTag,
   MdOutlineImage,
   MdOutlineCollections,
   // MdOutlineSettings,
   // MdOutlineLogout,
 } from "react-icons/md";
-import { BiEdit } from "react-icons/bi";
-import { RiImageEditLine } from "react-icons/ri";
+import { BiEdit } from "react-icons/bi";;
 import Link from "next/link";
 
-// different option for creating side nav items
-// export type NavItem = {
-//   label: string;
-//   href: string;
-//   icon: React.ReactNode;
-// };
-
-// type Props = {
-//   open: boolean;
-//   navItems?: NavItem[];
-//   setOpen(open: boolean): void;
-// };
 
 function UserSidebar() {
   return (

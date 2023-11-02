@@ -3,47 +3,9 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { useDropzone } from 'react-dropzone'
-import { fabric } from 'fabric'
-import { FabricJSCanvas, useFabricJSEditor } from 'fabricjs-react'
 
 const CanvasPage = () => {
-  const [imageHolder, setImageHolder] = useState([1,2,3,4,5])
-
-  const { editor, onReady } = useFabricJSEditor()
-
-  console.log(editor)
-
-  const onAddCircle = () => {
-    editor?.addCircle()
-  }
-
-  const onAddRectangle = () => {
-    editor?.addRectangle()
-  }
-
-  const onAddText = () => {
-    editor?.addText('hey')
-  }
-
-  const onDeleteAll = () => {
-    editor?.deleteAll()
-  }
-
-  const onZoomIn = () => {
-    editor?.zoomIn()
-  }
-
-  const onZoomOut = () => {
-    editor?.zoomOut()
-  }
-
-
-
-  // useEffect(() => {
-  //   fabric.Image.fromURL('/images/default.png', function (oImg: any) {
-  //     editor?.canvas.add(oImg);
-  //   });
-  // }, [fabric, editor])
+  
 
   const MyDropzone = () => {
     const onDrop = useCallback((acceptedFiles) => {
@@ -89,22 +51,7 @@ const CanvasPage = () => {
           </div>
         </div>
 
-        {/* main */}
-        <div className='flex gap-4 h-[50vh]'>
-          <div className='border p-3 rounded-lg'>
-            <div className='grid grid-cols-2 gap-1'>
-              <button onClick={onAddCircle} className='border px-1'>ㅇ</button>
-              <button onClick={onAddRectangle} className='border px-1'>ㅁ</button>
-              <button onClick={onAddText} className='border px-1'>T</button>
-              <button onClick={onZoomIn} className='border px-1'>+</button>
-              <button onClick={onZoomOut} className='border px-1'>-</button>
-            </div>
-          </div>
-          <div className='grow'>
-            {/* <Image src='/images/default.png' alt='Canvas Image' width={1024} height={768} className='object-contain' /> */}
-            <FabricJSCanvas className="sample-canvas w-full h-full" onReady={ onReady } />
-          </div>
-        </div>
+
 
         {/* bottom */}
         <div className='grid grid-cols-3 gap-6 mt-4'>

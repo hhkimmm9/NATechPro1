@@ -24,7 +24,7 @@ export default function RootLayout({
                 <TopNavBar />
               </div>
 
-              <div className='mt-16 mb-48'>
+              <div className='my-16'>
                 { children }
               </div>
 

@@ -39,26 +39,6 @@ function UserSidebar() {
           </div>
         </Link>
 
-        {/* canvas */}
-        <Link href="/gallery/canvas">
-          <div className="flex mb-2 pt-2 justify-start items center gap-4 px-5 hover:bg-blue-900 py-1 rounded-sm group cursor-pointer">
-            <MdOutlineDashboardCustomize className="text-2xl text-gray-600 group-hover:text-white" />
-            <h3 className="whitespace-nowrap font-semibold text-base text-gray-800 group-hover:text-white">
-              Canvas
-            </h3>
-          </div>
-        </Link>
-
-        {/* editor */}
-        <Link href="/gallery/editor">
-          <div className="flex mb-2 pt-2 justify-start items center gap-4 px-5 hover:bg-blue-900 py-1 rounded-sm group cursor-pointer">
-            <BiEdit className="text-2xl text-gray-600 group-hover:text-white" />
-            <h3 className="whitespace-nowrap font-semibold text-base text-gray-800 group-hover:text-white">
-              Editor
-            </h3>
-          </div>
-        </Link>
-
         {/* asset */}
         <Link href="/gallery/assets">
           <div className="flex mb-2 pt-2 justify-start items center gap-4 px-5 hover:bg-blue-900 py-1 rounded-sm group cursor-pointer">
@@ -79,22 +59,22 @@ function UserSidebar() {
           </div>
         </Link>
 
-        {/* draft */}
-        <Link href="/gallery/drafts">
-          <div className="flex mb-2 justify-start items center gap-4 px-5 hover:bg-blue-900 p-2 rounded-sm group cursor-pointer hover:shadow-lg m-auto">
-            <RiImageEditLine className="text-2xl text-gray-600 group-hover:text-white" />
+        {/* canvas */}
+        <Link href="/gallery/canvas">
+          <div className="flex mb-2 pt-2 justify-start items center gap-4 px-5 hover:bg-blue-900 py-1 rounded-sm group cursor-pointer">
+            <MdOutlineDashboardCustomize className="text-2xl text-gray-600 group-hover:text-white" />
             <h3 className="whitespace-nowrap font-semibold text-base text-gray-800 group-hover:text-white">
-              Drafts
+              Canvas
             </h3>
           </div>
         </Link>
 
-        {/* tags */}
-        <Link href="gallery/tags">
+        {/* editor */}
+        <Link href="/gallery/editor">
           <div className="flex mb-2 pt-2 justify-start items center gap-4 px-5 hover:bg-blue-900 py-1 rounded-sm group cursor-pointer">
-            <MdTag className="text-2xl text-gray-600 group-hover:text-white" />
+            <BiEdit className="text-2xl text-gray-600 group-hover:text-white" />
             <h3 className="whitespace-nowrap font-semibold text-base text-gray-800 group-hover:text-white">
-              Tags
+              Editor
             </h3>
           </div>
         </Link>

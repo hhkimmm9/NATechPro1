@@ -14,11 +14,6 @@ export const GallerySchema = new Schema(
             ref: "User",
             required: true
         },
-        tags: {
-            type: [String],
-            required: true 
-
-        }
     },
     { timestamps: true }
 );

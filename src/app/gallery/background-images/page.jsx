@@ -17,7 +17,7 @@ const BackgroundImagesPage = () => {
   const [dropdownType, setDropdownType] = useState('')
   const [showDropdown, setShowDropdown] = useState(false)
   
-  const { data: session, status } = useSession()
+  const { data: session, status } = useSession({ required: true })
 
   const MyDropzone = () => {
     const onDrop = useCallback((acceptedFiles) => {

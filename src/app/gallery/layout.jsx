@@ -1,5 +1,4 @@
-// import UserSidebar from "@/app//components/UserSidebar"
-import UserSidebar from "../components/UserSidebar"
+import UserSidebar from "@/app/components/UserSidebar"
 
 export default function GalleryLayout({ children }) {
   return (

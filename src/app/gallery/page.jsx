@@ -32,13 +32,10 @@ const GalleryPage = () => {
   }
 
   return (
-    <div className="p-5 flex flex-col h-full">
+    <div className="h-full p-5 flex flex-col gap-4">
       <div>
         <text className="font-bold text-lg px-5">My Gallery</text>
         <SearchInput />
-      </div>
-      <div>
-        <text className="px-5 font-semibold">Sort By: </text>
       </div>
 
       <GalleryImages imageData={imageData} />

@@ -20,12 +20,26 @@ const BackgroundImagesPage = () => {
   const { data: session, status } = useSession({ required: true })
 
   const MyDropzone = () => {
-    const onDrop = useCallback((acceptedFiles) => {
+    const onDrop = useCallback(async (acceptedFiles) => {
       const formData = new FormData()
       formData.append('background-image', acceptedFiles.files[0])
 
-      // TODO: send an image to the server.
-      // axios.post('/api/gallery/', { formData, tags: 'background-image'},)
+      try {
+        const response = await fetch('/api/background-images', {
+          headers: {
+            authorization: `Bearer ${session?.user.accessToken}`,
+          },
+          method: 'PUT',
+          body: formData
+        });
+  
+        const result = await response.json();
+        console.log("Success:", result);
+      }
+      catch (error) {
+        console.log("Error:", error);
+      }
+
     }, [])
 
     const { getRootProps, getInputProps, isDragActive} = useDropzone({ onDrop })
@@ -54,13 +68,14 @@ const BackgroundImagesPage = () => {
   // beforeMount
   useEffect(() => {
     const getImgs = async () => {
-      // await axios.get('/api/gallery?userID=646a626d6dcde576a25d584d')
-      await axios.get(`/api/gallery?userID=${session?.user.id}`, {
-        headers: { 'authorization': `Bearer ${session?.user.accessToken}` },
+      const response = await fetch(`/api/background-images?userID=${session?.user.id}`, {
+        headers: {
+          'authorization': `Bearer ${session?.user.accessToken}`
+        },
       })
-        .then(({ data }) => {
-          setImagesToShow(data)
-        })
+
+      const result = await response.json()
+      setImagesToShow(result)
     }
     // fetch images from the server
     getImgs()

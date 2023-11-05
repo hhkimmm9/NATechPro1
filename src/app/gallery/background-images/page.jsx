@@ -8,7 +8,7 @@ import GalleryImages from "@/app/gallery/components/GalleryImages";
 import DataHandleBar from '@/app/gallery/components/DataHandleBar';
 
 const BackgroundImagesPage = () => {
-  const [currentTab, setCurrentTab] = useState('local')
+  const [currentTab, setCurrentTab] = useState('personal')
   const [imagesToShow, setImagesToShow] = useState(undefined)
   const [imgToUpload, setImageToUpload] = useState()
   
@@ -93,7 +93,13 @@ const BackgroundImagesPage = () => {
   useEffect(() => {
     // send another request to the server to get filtered images
     const fetchImages = async () => {
-      if (currentTab === 'recent') {
+      if (currentTab === 'personal') {
+        // await axios.get('/api/gallery?')
+        //   .then(({ data }) => {
+        //     setImagesToShow(data)
+        //   })
+      }
+      else if (currentTab === 'recent') {
         // await axios.get('/api/gallery?')
         //   .then(({ data }) => {
         //     setImagesToShow(data)
@@ -133,8 +139,8 @@ const BackgroundImagesPage = () => {
         <div className='flex flex-row justify-between items-end'>
           <h1 className='text-3xl font-semibold'>Background Images</h1>
           <div className='mr-2 flex flex-row gap-4'>
-            {/* local */}
-            <span onClick={() => setCurrentTab('local')} className='cursor-pointer'>
+            {/* personal */}
+            <span onClick={() => setCurrentTab('personal')} className='cursor-pointer'>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
               </svg>

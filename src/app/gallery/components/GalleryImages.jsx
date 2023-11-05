@@ -33,7 +33,7 @@ const GalleryImages = ({ imageData }) => {
 
   return (
     <>
-      <div className="p-5 flex rounded-lg bg-stone-100">
+      <div className="p-5 flex rounded-lg shadow bg-stone-100">
         {girlImages && (
           <Grid.Container gap={2} wrap="wrap" justify="flex-start">
             {girlImages.map((item, index) => (

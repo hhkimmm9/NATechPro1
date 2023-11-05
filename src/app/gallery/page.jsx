@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 
 import SearchInput from "@/app/components/SearchInput"
-import GalleryImages from "./GalleryImages";
+import GalleryImages from "./components/GalleryImages";
 
 const GalleryPage = () => {
   const { data: session, status } = useSession({ required: true });

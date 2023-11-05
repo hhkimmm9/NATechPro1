@@ -6,6 +6,7 @@ import axios from 'axios'
 import Card from '../../components/Card'
 import SearchInput from '@/app/components/SearchInput'
 import { useSession } from "next-auth/react";
+import GalleryImages from "@/app/gallery/components/GalleryImages";
 
 const BackgroundImagesPage = () => {
   const [currentTab, setCurrentTab] = useState('local')
@@ -52,7 +53,20 @@ const BackgroundImagesPage = () => {
             ? (
               <p className='font-medium text-lg cursor-pointer'>Drop the files here ...</p>
             ) : (
-              <div className='flex flex-col gap-3 justify-center items-center bg-stone-100 p-10 w-96 h-72 cursor-pointer shadow hover:bg-stone-50'>
+              <div className='
+                w-full
+                p-8
+                flex
+                flex-col
+                gap-3
+                justify-center
+                items-center
+                cursor-pointer
+                rounded-lg
+                shadow
+              bg-stone-100
+              hover:bg-stone-50
+              '>
                 <p className='font-medium text-lg'> Click here to upload an image</p>
 
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
@@ -215,17 +229,10 @@ const BackgroundImagesPage = () => {
             </div>
           </div>
 
-          <div className='
-            grid grid-cols-1
-            md:grid-cols-2 md:gap-4
-            xl:grid-cols-3
-          '>
-            {/* upload a new background image */}
-            { MyDropzone() }
+          {/* upload a new background image */}
+          { MyDropzone() }
 
-            {/* images loaded from the server */}
-            { imagesToShow?.map(item => <Card key={item._id} imgSrc={item.image} />) }
-          </div>
+          <GalleryImages imageData={imagesToShow} />
 
           {/* TODO: pagination */}
         </div>

@@ -1,49 +1,67 @@
-"use client"
+"use client";
 
-import React from 'react'
-import { Text, Grid, Row, Col, Spacer, Card } from "@nextui-org/react";
+import React from 'react';
+import { MdOutlineCancel } from "react-icons/md";
+import Image from 'next/image';
+import { useSession } from 'next-auth/react';
 
 const GalleryImages = ({ imageData, galleryType }) => {
+
+  const { data: session } = useSession({ required: true });
+
+  const deleteImage = async (itemId) => {
+    try {
+
+      const response = await fetch(`/api/gallery/${itemId}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'authorization': 'Bearer ' + session?.user._id
+          }
+        });
+
+      const result = response.json();
+    } catch (error) {
+      console.log(error)
+      // 
+    }
+  }
+
   return (
     <>
       <div className="p-5 flex rounded-lg shadow bg-stone-100">
         {imageData && (
-          <Grid.Container gap={2} wrap="wrap" justify="flex-start">
+
+          <div className='grid grid-cols-2 gap-2'>
             { imageData.map((item, index) => {
               if (item.type === galleryType) {
                 return (
-                  <Grid xs={6} sm={3} key={index}>
-                    <Card isPressable borderWeight="light">
-                      <Card.Body css={{ p: 0 }}>
-                        <Card.Image
-                          src={item.image}
-                          objectFit="cover"
-                          width={240}
-                          height={200}
-                          alt={item.description}
-                        />
-                      </Card.Body>
-                      <Card.Footer css={{ justifyItems: "flex-start" }}>
-                        <Row wrap="wrap" justify="space-between" align="center">
-                          <Text b>{item.description}</Text>
-                          {/* <Col>
-                            <Text css={{
-                              color: "$accents7",
-                              fontWeight: "$semibold",
-                              fontSize: "$sm",
-                            }}>
-                              Tags: {item.tags}
-                            </Text>
-                          </Col> */}
-                        </Row>
-                      </Card.Footer>
-                    </Card>
-                  </Grid>
+                  <div className='
+                    relative col-span-1
+                    p-4 rounded-xl bg-white
+                    flex flex-col
+                  '>
+                    <div className='flex flex-col gap-4'>
+                      <Image src={item.image} alt={'background images'}
+                        width={240} height={200} className='mx-auto'
+                      />
+                      <span className='truncate whitespace-nowrap'>{item.name}</span>
+                    </div>
+                      
+                        
+                    <div onClick={() => deleteImage(item._id)} 
+                      className='
+                        absolute top-2 right-2.5
+                        text-stone-600 cursor-pointer
+                        hover:text-stone-800 hover:scale-125 duration-150
+                    '>
+                      <MdOutlineCancel size={24} />
+                    </div>
+                  </div>
                 )
-              } 
-              
+              }
             })}
-          </Grid.Container>
+          </div>
         )}
       </div>
     </>

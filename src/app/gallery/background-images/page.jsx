@@ -10,7 +10,7 @@ import DataHandleBar from '@/app/gallery/components/DataHandleBar';
 import GalleryImages from "@/app/gallery/components/GalleryImages";
 
 const BackgroundImagesPage = () => {
-  const [imagesToShow, setImagesToShow] = useState(undefined)
+  const [imageData, setImageData] = useState(undefined)
   const [imgToUpload, setImageToUpload] = useState()
   
   const { data: session, status } = useSession({ required: true })
@@ -18,19 +18,35 @@ const BackgroundImagesPage = () => {
   const MyDropzone = () => {
     const onDrop = useCallback(async (acceptedFiles) => {
       const formData = new FormData()
-      formData.append('background-image', acceptedFiles.files[0])
+      formData.append('file', acceptedFiles[0])
+      formData.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || "")
+        formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_PRESET || "")
 
       try {
-        const response = await fetch('/api/background-images', {
+
+        const responseCloudinary = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/upload`, {
+          method: "POST",
+          body: formData
+        });
+        const resultCloudinary = await responseCloudinary.json();
+
+        // console.log(resultCloudinary)
+
+        const response = await fetch('/api/gallery', {
           headers: {
             authorization: `Bearer ${session?.user.accessToken}`,
           },
-          method: 'PUT',
-          body: formData
+          method: 'POST',
+          body: JSON.stringify({
+            name: `${resultCloudinary.original_filename}_${resultCloudinary.asset_id}`,
+            image: resultCloudinary.secure_url,
+            type: 'backgroundImage',
+            userID: session.user._id
+          })
         });
-  
         const result = await response.json();
-        console.log("Success:", result);
+
+        // console.log("Success:", result);
       }
       catch (error) {
         console.log("Error:", error);
@@ -77,14 +93,14 @@ const BackgroundImagesPage = () => {
   // beforeMount
   useEffect(() => {
     const getImgs = async () => {
-      const response = await fetch(`/api/background-images?userID=${session?.user.id}`, {
+      const response = await fetch(`/api/gallery?userID=${session?.user._id}`, {
         headers: {
           'authorization': `Bearer ${session?.user.accessToken}`
         },
       })
 
       const result = await response.json()
-      setImagesToShow(result)
+      setImageData(result)
     }
     // fetch images from the server
     getImgs()
@@ -95,7 +111,7 @@ const BackgroundImagesPage = () => {
 
     await axios.post(`/api/gallery?name=${searchTerm}`)
       .then(({ data }) => {
-        setImagesToShow(data)
+        setImageData(data)
       })
       .finally(() => {
         setSearchTerm('')
@@ -115,7 +131,7 @@ const BackgroundImagesPage = () => {
           {/* upload a new background image */}
           { MyDropzone() }
 
-          <GalleryImages imageData={imagesToShow} />
+          <GalleryImages imageData={imageData} galleryType={'backgroundImage'} />
 
           {/* TODO: pagination */}
         </div>

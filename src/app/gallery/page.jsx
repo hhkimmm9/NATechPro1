@@ -4,12 +4,12 @@ import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 
 import SearchInput from "@/app/components/SearchInput"
-import GalleryImages from "./GalleryImages";
+import GalleryImages from "./components/GalleryImages";
 
 const GalleryPage = () => {
   const { data: session, status } = useSession({ required: true });
 
-  const [imageData, setImageDate] = useState([])
+  const [imageData, setImageData] = useState([])
 
   useEffect(() => {
     if (status === "authenticated") getImageData()
@@ -17,14 +17,14 @@ const GalleryPage = () => {
 
   const getImageData = async () => {
     try {
-      const res = await fetch("/api/gallery", {
+      const response = await fetch(`/api/gallery?userID=${session?.user._id}`, {
         cache: "no-store",
         headers: {
           authorization: `Bearer ${session?.user.accessToken}`,
         }
       })
-      const resJSON = await res.json()
-      setImageDate(resJSON)
+      const result = await response.json()
+      setImageData(result)
     } catch (err) {
       // error handling here
       console.log(err)
@@ -38,7 +38,7 @@ const GalleryPage = () => {
         <SearchInput />
       </div>
 
-      <GalleryImages imageData={imageData} />
+      <GalleryImages imageData={imageData} galleryType={'galleryImage'}/>
     </div>
   );
 }

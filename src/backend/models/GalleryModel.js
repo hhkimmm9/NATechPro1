@@ -9,6 +9,12 @@ export const GallerySchema = new Schema(
             type: String,
             required: true
         },
+        type: {
+            type: String,
+            required: true,
+            enum: ['galleryImage', 'segment', 'backgroundImage'],
+            default: 'galleryImage',
+        },
         userID: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",

@@ -1,13 +1,13 @@
 'use client'
 
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import Script from 'next/script'
-// import AppContext from "@/app/components/hooks/createContext"
-import AppContext from "../../components/hooks/createContext"
+import AppContext from "@/app/components/hooks/createContext"
 import { InferenceSession, Tensor } from "onnxruntime-web"
 const ort = require("onnxruntime-web")
 import npyjs from "npyjs"
+import { useDropzone } from 'react-dropzone'
 
 export default function EditorPage() {
   const {
@@ -17,62 +17,70 @@ export default function EditorPage() {
   } = useContext(AppContext)
 
   // const IMAGE_PATH = "/assets/data/truck.jpg";
-  const IMAGE_EMBEDDING = "/assets/data/truck_embedding.npy"
-  const MODEL_DIR = "/assets/models/sam_onnx_quantized.onnx"
-
-  const [imageUrl, setIamgeUrl] = useState('')
+  
+  const [imageUrl, setImageUrl] = useState('')
+  const [imageSelected, setImageSelected] = useState(false)
   const [model, setModel] = useState(null) // ONNX model
   const [tensor, setTensor] = useState(null) // Image embedding tensor
 
   useEffect(() => {
-    // Initialize the ONNX model
-    const initModel = async () => {
-      try {
-        if (MODEL_DIR === undefined) return;
-        const URL = MODEL_DIR
-        const model = await InferenceSession.create(URL)
-        setModel(model)
-      } catch (e) {
-        console.log(e)
-      }
-    };
-    initModel();
+    // samInit()
   }, [])
 
-  const changeImage = async (e) => {
-    let file = e.target.files[0]
-    let url = window.URL.createObjectURL(file)
-    console.log(url)
-
-    // change image in front page
-    setIamgeUrl(url)
-
-    // Load the image
-    // const url = new URL(imageUrl, location.origin);
-    loadImage(url);
-
-    changeImageEvent(file)
-  }
-
-  const loadImage = async (url) => {
-    try {
-      const img = new Image();
-      img.src = url.href;
-      img.onload = () => {
-        const { height, width, samScale } = handleImageScale(img);
-        setModelScale({
-          height: height,  // original image height
-          width: width,  // original image width
-          samScale: samScale, // scaling factor for image which has been resized to longest side 1024
-        });
-        img.width = width; 
-        img.height = height; 
-        setImage(img);
-      };
-    } catch (error) {
-      console.log(error);
-    }
+  // Initialize the ONNX model
+  const samInit = async () => {
+    const MODEL_DIR = "/assets/models/sam_onnx_quantized.onnx"
+    const IMAGE_EMBEDDING = "/assets/data/truck_embedding.npy"
   };
+
+  // handling the drag and drop box.
+  const MyDropzone = () => {
+    const onDrop = useCallback(async (acceptedFiles) => {
+
+      setImageSelected(true)
+
+      let url = window.URL.createObjectURL(acceptedFiles[0])
+      // change image in front page
+      setImageUrl(url)
+    }, [])
+
+    const { getRootProps, getInputProps, isDragActive} = useDropzone({ onDrop })
+
+    if (!imageSelected) {
+      return (
+        <div {...getRootProps()}>
+          <input {...getInputProps()} />
+          {
+            isDragActive
+              ? (
+                <p className='font-medium text-lg cursor-pointer'>Drop the files here ...</p>
+              ) : (
+                <div className='
+                  w-full
+                  p-8
+                  flex
+                  flex-col
+                  gap-3
+                  justify-center
+                  items-center
+                  cursor-pointer
+                  rounded-lg
+                  shadow
+                bg-stone-100
+                hover:bg-stone-50
+                '>
+                  <p className='font-medium text-lg'> Click here to upload an image</p>
+  
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                  </svg>
+                </div>
+              )
+          }
+        </div>
+      )
+    }
+  }
   
   const changeImageEvent = async (imageFile) => {
     // send image to server
@@ -122,12 +130,6 @@ export default function EditorPage() {
     return tensor;
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-
-    // 
-  }
-
   return (
     <>
       {/* <Script
@@ -136,17 +138,9 @@ export default function EditorPage() {
       /> */}
       
       <div className="p-5">
-        <form onSubmit={(e) => handleSubmit(e)}>
-          <label>
-            Your image file
-            <input type="file" id="fileUploader" accept="image/*" onChange={(e) => changeImage(e)}/>
-          </label>
-          <button type='submit'>submit</button>
-        </form>
+        { MyDropzone() }
 
-        { imageUrl.length > 0 && (
-          <Image id="img" src={imageUrl} alt='' width={512} height={512} className='object-contain'/>
-        )}
+        { imageSelected && ( <Image id="img" src={imageUrl} alt='' width={320} height={150} className='object-contain'/> )}
       </div>
     </>
   )

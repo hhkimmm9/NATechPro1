@@ -5,7 +5,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
 
-const GalleryImages = ({ imageData, galleryType }) => {
+const GalleryImages = ({ imageData, galleryType, refresh }) => {
 
   const { data: session } = useSession({ required: true });
 
@@ -16,11 +16,13 @@ const GalleryImages = ({ imageData, galleryType }) => {
         {
           method: 'DELETE',
           headers: {
-            'authorization': 'Bearer ' + session?.user._id
+            authorization: `Bearer ${session?.user.accessToken}`,
           }
         });
 
       const result = response.json();
+
+      refresh()
     } catch (error) {
       console.log(error)
       // 
@@ -42,7 +44,7 @@ const GalleryImages = ({ imageData, galleryType }) => {
                     flex flex-col
                   '>
                     <div className='flex flex-col gap-4'>
-                      <Image src={item.image} alt={'background images'}
+                      <Image src={item.image} alt={`background image ${index}`}
                         width={240} height={200} className='mx-auto'
                       />
                       <span className='truncate whitespace-nowrap'>{item.name}</span>

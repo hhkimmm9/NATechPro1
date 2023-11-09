@@ -46,7 +46,9 @@ const BackgroundImagesPage = () => {
         });
         const result = await response.json();
 
-        // console.log("Success:", result);
+        console.log("Success:", result);
+
+        getImgs()
       }
       catch (error) {
         console.log("Error:", error);
@@ -92,19 +94,20 @@ const BackgroundImagesPage = () => {
 
   // beforeMount
   useEffect(() => {
-    const getImgs = async () => {
-      const response = await fetch(`/api/gallery?userID=${session?.user._id}`, {
-        headers: {
-          'authorization': `Bearer ${session?.user.accessToken}`
-        },
-      })
-
-      const result = await response.json()
-      setImageData(result)
-    }
     // fetch images from the server
     getImgs()
   }, [session])
+
+  const getImgs = async () => {
+    const response = await fetch(`/api/gallery?userID=${session?.user._id}`, {
+      headers: {
+        'authorization': `Bearer ${session?.user.accessToken}`
+      },
+    })
+
+    const result = await response.json()
+    setImageData(result)
+  }
 
   const handleSearch = async (e) => {
     e.preventDefault()
@@ -131,7 +134,11 @@ const BackgroundImagesPage = () => {
           {/* upload a new background image */}
           { MyDropzone() }
 
-          <GalleryImages imageData={imageData} galleryType={'backgroundImage'} />
+          <GalleryImages
+            imageData={imageData}
+            galleryType={'backgroundImage'}
+            refresh={() => getImgs()}
+          />
 
           {/* TODO: pagination */}
         </div>

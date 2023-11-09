@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useContext, useState, useEffect, useCallback } from 'react'
+import React, { useContext, useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import Script from 'next/script'
 import AppContext from "@/app/components/hooks/createContext"
@@ -8,6 +8,8 @@ import { InferenceSession, Tensor } from "onnxruntime-web"
 const ort = require("onnxruntime-web")
 import npyjs from "npyjs"
 import { useDropzone } from 'react-dropzone'
+import Cropper, { ReactCropperElement } from "react-cropper"
+import "cropperjs/dist/cropper.css";
 
 export default function EditorPage() {
   const {
@@ -15,6 +17,16 @@ export default function EditorPage() {
     image: [, setImage],
     maskImg: [, setMaskImg],
   } = useContext(AppContext)
+
+  const cropperRef = useRef(null)
+  const onCrop = () => {
+    const cropper = cropperRef.current?.cropper
+    // console.log(cropper.getCroppedCanvas().toDataURL())
+    console.log(cropper.getCroppedCanvas())
+
+    const formData = new FormData()
+    formData.append('croppedImage', cropper.getCroppedCanvas().toBlob())
+  }
 
   // const IMAGE_PATH = "/assets/data/truck.jpg";
   
@@ -40,6 +52,7 @@ export default function EditorPage() {
       setImageSelected(true)
 
       let url = window.URL.createObjectURL(acceptedFiles[0])
+
       // change image in front page
       setImageUrl(url)
     }, [])
@@ -140,7 +153,31 @@ export default function EditorPage() {
       <div className="p-5">
         { MyDropzone() }
 
-        { imageSelected && ( <Image id="img" src={imageUrl} alt='' width={320} height={150} className='object-contain'/> )}
+        { imageSelected && (
+          <>
+            <Cropper
+              src={imageUrl}
+              style={{ height: 400, width: "100%" }}
+              // Cropper.js options
+              initialAspectRatio={16 / 9}
+              guides={false}
+              crop={onCrop}
+              ref={cropperRef}
+            />
+
+            <div className='mt-8 flex gap-8 justify-center'>
+              <button onClick={() => { setImageUrl(''); setImageSelected(false); }}
+                className='
+                  px-2 py-1 border rounded-xl hover:bg-stone-50
+              '>Cancel</button>
+
+              <button onClick={() => {}}
+                className='
+                  px-2 py-1 border rounded-xl hover:bg-blue-100
+              '>Submit</button>
+            </div>
+          </>
+        )}
       </div>
     </>
   )

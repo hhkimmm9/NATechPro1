@@ -8,7 +8,7 @@ const CanvasPage = () => {
   
 
   const MyDropzone = () => {
-    const onDrop = useCallback((acceptedFiles) => {
+    const onDrop = useCallback((acceptedFiles: any) => {
       const formData = new FormData()
       formData.append('background-image', acceptedFiles.files[0])
 
@@ -83,14 +83,14 @@ const CanvasPage = () => {
                 </div>
 
                 {/* images */}
-                { imageHolder.map((item) => {
+                {/* { imageHolder.map((item) => {
                   return (
                     <Image src='/images/default.png' alt='Images in image holder' width={256} height={256}
                       className='object-contain cursor-pointer'
                       key={item}
                     />
                   )
-                })}
+                })} */}
               </div>
             </div>
           </div>

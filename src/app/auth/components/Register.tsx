@@ -12,7 +12,7 @@ const RegisterPage = () => {
 
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const pwdConfirm = pwdInput === confirmPwdInput;

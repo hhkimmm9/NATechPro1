@@ -59,7 +59,7 @@ const TopNavBar = () => {
         </div>
 
         <div className="flex justify-end">
-          <SignInButton session={session} />
+          <SignInButton />
         </div>
       </nav>
     </>

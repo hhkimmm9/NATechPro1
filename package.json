@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.14",
-    "@nextui-org/react": "^1.0.0-beta.12",
     "@types/node": "20.1.0",
     "@types/react": "18.2.6",
     "@types/react-dom": "18.2.4",
@@ -34,7 +33,8 @@
     "react-dropzone": "^14.2.3",
     "react-icons": "^4.8.0",
     "react-spinners": "^0.13.8",
-    "tailwindcss": "3.3.2"
+    "tailwindcss": "3.3.2",
+    "typescript": "^5.2.2"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",

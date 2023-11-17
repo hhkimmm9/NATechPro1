@@ -12,7 +12,7 @@ import { NextResponse } from "next/server"
  *  {{URL}}/api/gallery?name=998&tags=bottle
  *  get the requested user gallery where name begins with 998 and tags include bottle
  */
-export const GET = async (req, res) => {
+export const GET = async (req: any, res: any) => {
   await connectMongoDB();
 
   try {
@@ -42,7 +42,7 @@ export const GET = async (req, res) => {
     const galleries = await Gallery.find(query).sort({ updatedAt: -1 });
 
     return NextResponse.json(galleries, { status: 200 });
-  } catch (err) {
+  } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 };
@@ -51,7 +51,7 @@ export const GET = async (req, res) => {
  *  Create a gallery
  *  req body: name, image, userID, tags
  */
-export const POST = async (req, res) => {
+export const POST = async (req: any, res: any) => {
   await connectMongoDB();
 
   try {
@@ -67,7 +67,7 @@ export const POST = async (req, res) => {
     const body = await req.json();
     const gallery = await Gallery.create(body);
     return NextResponse.json({ message: "Gallery created" }, { status: 200 });
-  } catch (err) {
+  } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 };

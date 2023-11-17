@@ -4,12 +4,23 @@ import React from 'react';
 import { MdOutlineCancel } from "react-icons/md";
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
+import { IGallery, GalleryTypeEnum } from "@/app/interfaces/index";
 
-const GalleryImages = ({ imageData, galleryType, refresh }) => {
+const GalleryImages = (
+  {
+    imageData,
+    galleryType,
+    refresh
+  }: {
+    imageData: (IGallery[] | undefined),
+    galleryType: GalleryTypeEnum,
+    refresh: Function
+  }
+) => {
 
   const { data: session } = useSession({ required: true });
 
-  const deleteImage = async (itemId) => {
+  const deleteImage = async (itemId: string) => {
     try {
 
       const response = await fetch(`/api/gallery/${itemId}`,

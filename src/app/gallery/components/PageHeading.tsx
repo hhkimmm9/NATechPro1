@@ -2,7 +2,16 @@
 
 import React, { useState, useEffect  } from "react"
 
-const Heading = ({ heading, enableTabs, emitCurrentTab }) => {
+const Heading = (
+  {
+    heading,
+    enableTabs,
+    emitCurrentTab
+  }: {
+    heading: string,
+    enableTabs: boolean,
+    emitCurrentTab: Function
+  }) => {
   const [currentTab, setCurrentTab] = useState("personal")
 
   // tab change

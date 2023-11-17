@@ -1,6 +1,7 @@
+import React from 'react'
 import UserSidebar from "@/app/components/UserSidebar"
 
-export default function GalleryLayout({ children }) {
+export default function GalleryLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className='h-screen flex flex-col'>
       <div className="grow flex flex-row">

@@ -8,8 +8,8 @@ export const authOptions = {
   },
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
       async profile(profile) {
         // Even if we use oAuth we still store user info into our database.
         const res = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/oAuth/`, {
@@ -53,11 +53,11 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: any, user: any }) {
       return { ...token, ...user };
     },
 
-    async session({ session, token }) {
+    async session({ session, token }: { session: any, token: any }) {
       session.user = token
       return session;
     },

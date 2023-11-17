@@ -47,7 +47,7 @@ export default function EditorPage() {
 
   // handling the drag and drop box.
   const MyDropzone = () => {
-    const onDrop = useCallback(async (acceptedFiles) => {
+    const onDrop = useCallback(async (acceptedFiles: any) => {
 
       setImageSelected(true)
 
@@ -95,7 +95,7 @@ export default function EditorPage() {
     }
   }
   
-  const changeImageEvent = async (imageFile) => {
+  const changeImageEvent = async (imageFile: any) => {
     // send image to server
     let formData = new FormData()
     formData.append("file", imageFile, "image.jpg")
@@ -136,7 +136,7 @@ export default function EditorPage() {
   }
 
   // Decode a Numpy file into a tensor. 
-  const loadNpyTensor = async (tensorFile, dType) => {
+  const loadNpyTensor = async (tensorFile: any, dType: any) => {
     let npLoader = new npyjs();
     const npArray = await npLoader.load(tensorFile);
     const tensor = new ort.Tensor(dType, npArray.data, npArray.shape);

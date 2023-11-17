@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 
-const Card = ({ imgSrc }) => {
+const Card = ({ imgSrc }: { imgSrc: string }) => {
   return (
     <>
       <Image src={imgSrc} alt='Card Image' width={384} height={288}

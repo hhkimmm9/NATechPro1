@@ -4,7 +4,7 @@ import User from "@/backend/models/UserModel";
 import { connectMongoDB } from "@/backend/config/db";
 
 
-export async function POST(req) {
+export async function POST(req: any) {
   const body = await req.json();
 
   try {
@@ -36,7 +36,7 @@ export async function POST(req) {
     };
 
     return NextResponse.json({ success: true, user });
-  } catch (err) {
+  } catch (err: any) {
     return new Response(err.message, { status: 500 });
   }
 }

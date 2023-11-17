@@ -6,9 +6,9 @@ import axios from 'axios'
 export default function Test() {
     const [name, setName] = useState("default")
     const [image, setImage] = useState("")
-    const [imagePreview, setImagePreview] = useState("")
+    const [imagePreview, setImagePreview] = useState<string | ArrayBuffer | null>(null)
 
-    const generateImagePreview = (e) => {
+    const generateImagePreview = (e: any) => {
         const reader = new FileReader()
         reader.onload = () => {
             if (reader.readyState === 2) {

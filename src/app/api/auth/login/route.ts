@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import User, { Iuser } from "@/backend/models/UserModel";
+import User from "@/backend/models/UserModel";
 import { connectMongoDB } from "@/backend/config/db";
 import * as bcrypt from "bcryptjs";
 import { signJwtAccessToken } from "@/backend/utils/jwt";
 
-export async function POST(req) {
+export async function POST(req: any) {
   const body = await req.json();
   
   try {
@@ -38,7 +38,7 @@ export async function POST(req) {
     };
     // console.log(user)
     return new Response(JSON.stringify(user));
-  } catch (err) {
+  } catch (err: any) {
     return new Response(err.message, { status: 500 });
   }
 }

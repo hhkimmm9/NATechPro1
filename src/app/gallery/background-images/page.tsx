@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import Card from '../../components/Card'
 import { useSession } from "next-auth/react";
+import Card from '../../components/Card'
+import { GalleryTypeEnum } from '@/app/interfaces';
 
 import PageHeading from '@/app/gallery/components/PageHeading';
 import DataHandleBar from '@/app/gallery/components/DataHandleBar';
@@ -16,15 +17,16 @@ const BackgroundImagesPage = () => {
   const { data: session, status } = useSession({ required: true })
 
   const MyDropzone = () => {
-    const onDrop = useCallback(async (acceptedFiles) => {
+    const onDrop = useCallback(async (acceptedFiles: any) => {
       const formData = new FormData()
       formData.append('file', acceptedFiles[0])
       formData.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || "")
-        formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_PRESET || "")
+      formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_PRESET || "")
 
       try {
+        const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/upload`
 
-        const responseCloudinary = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/upload`, {
+        const responseCloudinary = await fetch(url, {
           method: "POST",
           body: formData
         });
@@ -41,7 +43,7 @@ const BackgroundImagesPage = () => {
             name: `${resultCloudinary.original_filename}_${resultCloudinary.asset_id}`,
             image: resultCloudinary.secure_url,
             type: 'backgroundImage',
-            userID: session.user._id
+            userID: session?.user._id
           })
         });
         const result = await response.json();
@@ -109,23 +111,11 @@ const BackgroundImagesPage = () => {
     setImageData(result)
   }
 
-  const handleSearch = async (e) => {
-    e.preventDefault()
-
-    await axios.post(`/api/gallery?name=${searchTerm}`)
-      .then(({ data }) => {
-        setImageData(data)
-      })
-      .finally(() => {
-        setSearchTerm('')
-      })
-  }
-
   return (
     <div>
       <div className='flex flex-col px-16 py-10'>
         <PageHeading heading={'Background Images'} enableTabs={true}
-          emitCurrentTab={(currentTab) => { console.log(currentTab)}}
+          emitCurrentTab={(currentTab: string) => { console.log(currentTab) }}
         />
 
         <div className='pt-2 flex flex-col gap-4'>
@@ -136,7 +126,7 @@ const BackgroundImagesPage = () => {
 
           <GalleryImages
             imageData={imageData}
-            galleryType={'backgroundImage'}
+            galleryType={GalleryTypeEnum.BACKGROUND}
             refresh={() => getImgs()}
           />
 

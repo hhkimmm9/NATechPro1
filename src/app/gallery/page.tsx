@@ -5,11 +5,12 @@ import { useSession } from "next-auth/react";
 
 import SearchInput from "@/app/components/SearchInput"
 import GalleryImages from "./components/GalleryImages";
+import { IGallery, GalleryTypeEnum } from "@/app/interfaces/index";
 
 const GalleryPage = () => {
   const { data: session, status } = useSession({ required: true });
 
-  const [imageData, setImageData] = useState([])
+  const [imageData, setImageData] = useState<IGallery[] | undefined>(undefined)
 
   useEffect(() => {
     if (status === "authenticated") getImageData()
@@ -35,10 +36,14 @@ const GalleryPage = () => {
     <div className="h-full p-5 flex flex-col gap-4">
       <div>
         <text className="font-bold text-lg px-5">My Gallery</text>
-        <SearchInput />
+        <SearchInput onChange={() => {}}/>
       </div>
 
-      <GalleryImages imageData={imageData} galleryType={'galleryImage'}/>
+      <GalleryImages
+        imageData={imageData}
+        galleryType={GalleryTypeEnum.GALLERY}
+        refresh={getImageData}
+      />
     </div>
   );
 }

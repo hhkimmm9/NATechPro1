@@ -4,19 +4,18 @@ import { signIn, signOut } from "next-auth/react";
 import Image from "next/image";
 import React, { useState, useEffect, useRef } from "react";
 import Link from 'next/link'
-import { Text } from "@nextui-org/react";
 import { usePathname } from 'next/navigation'
 import { useSession } from "next-auth/react"
 
 const SignInButton = () => {
   const pathname = usePathname()
   
-  const dropdownRef = useRef()
+  const dropdownRef = useRef<HTMLDivElement>(null)
   const [showDropdown, setShowDropdown] = useState(false);
   const { data: session } = useSession();
 
   useEffect(() => {
-    let showDropdownHandler = (e) => {
+    let showDropdownHandler = (e: any) => {
       if (!dropdownRef.current?.contains(e.target)) {
         setShowDropdown(false)
       }
@@ -37,8 +36,7 @@ const SignInButton = () => {
               className="w-8 h-8 rounded-full"
             />
             <div className="text-lg">
-              {/* Text? */}
-              <Text>{ session?.user.email }</Text>
+              <span>{ session?.user.email }</span>
             </div>
           </button>
           

@@ -3,17 +3,19 @@
 import React, { useState, useEffect, useRef } from 'react'
 import SearchInput from '@/app/components/SearchInput'
 
-const DataHandleBar = () => {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [showDropdown, setShowDropdown] = useState(false)
-  const [dropdownType, setDropdownType] = useState('')
+const DataHandleBar = (
+  {}
+) => {
+  const [searchTerm, setSearchTerm] = useState<string>('')
+  const [showDropdown, setShowDropdown] = useState<boolean>(false)
+  const [dropdownType, setDropdownType] = useState<string>('')
 
-  const dropdownRef = useRef()
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     // https://www.youtube.com/watch?v=HfZ7pdhS43s
-    let handler = (e) => {
-      if (!dropdownRef.current.contains(e.target)) {
+    let handler = (e: any) => {
+      if (!dropdownRef.current?.contains(e.target)) {
         setShowDropdown(false)
         // console.log(dropdownRef.current)
       }
@@ -42,12 +44,24 @@ const DataHandleBar = () => {
     setShowDropdown(true)
   }
 
+  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    // await axios.post(`/api/gallery?name=${searchTerm}`)
+    //   .then(({ data }) => {
+    //     // setImageData(data)
+    //   })
+    //   .finally(() => {
+    //     setSearchTerm('')
+    //   })
+  }
+
   return (
     <>
       <div className='flex flex-row justify-between items-center'>
         <div>
-          <form onSubmit={(e) => handleSearch(e)} className='flex gap-2 items-center'>
-            <SearchInput value={searchTerm} onChange={(value) => setSearchTerm(value)}/>
+          <form onSubmit={handleSearch} className='flex gap-2 items-center'>
+            <SearchInput value={searchTerm} onChange={(value: string) => setSearchTerm(value)}/>
 
             <button type='submit'>
             {/* magnifier icon */}

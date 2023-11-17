@@ -24,11 +24,11 @@ const LoginPage = () => {
 
     else {
       if (localStorage.getItem("rememberUserId"))
-        localStorage.removeItem("rememberUserId", emailInput)
+        localStorage.removeItem("rememberUserId")
     }
   }, [rememberMe])
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const response = await signIn("credentials", {

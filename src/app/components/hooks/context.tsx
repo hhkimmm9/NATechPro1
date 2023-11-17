@@ -1,3 +1,5 @@
+"use client";
+
 // Copyright (c) Meta Platforms, Inc. and affiliates.
 // All rights reserved.
 
@@ -7,7 +9,7 @@
 import React, { useState } from "react";
 import AppContext from "./createContext";
 
-const AppContextProvider = ({ children }) => {
+const AppContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [clicks, setClicks] = useState(null);
   const [image, setImage] = useState(null);
   const [maskImg, setMaskImg] = useState(null);

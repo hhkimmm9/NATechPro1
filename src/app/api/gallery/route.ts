@@ -63,9 +63,29 @@ export const POST = async (req: any, res: any) => {
     }, authOptions )
     if (!session) return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
 
+    const formData = await req.formData()
+    const file = formData.get('file')
+
+    const formDataToCloudinary = new FormData()
+    formDataToCloudinary.append('file', file)
+    formDataToCloudinary.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || "")
+    formDataToCloudinary.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_PRESET || "")
+
+    const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/upload`
+
+    const responseCloudinary = await fetch(url, {
+      method: "POST",
+      body: formDataToCloudinary
+    });
+    const resultCloudinary = await responseCloudinary.json();
+
     // user verified, create gallery for that user
-    const body = await req.json();
-    const gallery = await Gallery.create(body);
+    await Gallery.create({
+      name: `${resultCloudinary.original_filename}_${resultCloudinary.asset_id}`,
+      image: resultCloudinary.secure_url,
+      type: 'backgroundImage',
+      userID: session?.user._id
+    });
     return NextResponse.json({ message: "Gallery created" }, { status: 200 });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 500 });

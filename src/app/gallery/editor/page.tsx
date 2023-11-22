@@ -4,6 +4,8 @@ import React, { useContext, useState, useEffect, useCallback, useRef } from 'rea
 import Script from 'next/script'
 import AppContext from "@/app/components/hooks/createContext"
 
+import { useSession } from "next-auth/react";
+
 import { useDropzone } from 'react-dropzone'
 import Cropper, { ReactCropperElement } from "react-cropper"
 import "cropperjs/dist/cropper.css";
@@ -23,6 +25,8 @@ const EditorPage: React.FC = () => {
   const [imageSelected, setImageSelected] = useState(false)
   const [model, setModel] = useState(null) // ONNX model
   const [tensor, setTensor] = useState(null) // Image embedding tensor
+
+  const { data: session, status } = useSession({ required: true })
 
   const cropperRef = useRef<ReactCropperElement>(null)
   const onCrop = (event: any) => {
@@ -46,6 +50,7 @@ const EditorPage: React.FC = () => {
 
       setImageSelected(true)
 
+      // change tha image on the page.
       let url = window.URL.createObjectURL(acceptedFiles[0])
 
       // change image in the page
@@ -94,65 +99,42 @@ const EditorPage: React.FC = () => {
     e.preventDefault()
 
     const cropper = cropperRef.current?.cropper
-    const formData = new FormData()
 
-    cropper?.getCroppedCanvas({
-      width: 288,
-      height: 162,
-    });
+    // cropper?.getCroppedCanvas({
+    //   width: 288,
+    //   height: 162,
+    // });
 
-    cropper?.getCroppedCanvas({
-      minWidth: 256,
-      minHeight: 256,
-      maxWidth: 4096,
-      maxHeight: 4096,
-    })
+    // cropper?.getCroppedCanvas({
+    //   minWidth: 256,
+    //   minHeight: 256,
+    //   maxWidth: 4096,
+    //   maxHeight: 4096,
+    // })
 
-    await cropper?.getCroppedCanvas().toBlob((blob: any) => {
+    // as users change the cropper
+    await cropper?.getCroppedCanvas().toBlob(async (blob: any) => {
+      const formData = new FormData()
+      
       let imageFile = new File([blob], "image.jpg", { type: "image/jpeg" })
       formData.append("file", imageFile, "image.jpg")
-    }, "image/jpeg")
-    
-    try {
-      // send image to server
-      const response = await fetch("http://0.0.0.0:8888/image-embedding", {
-        method: "POST",
-        body: formData,
-        headers: {
-          // 'Content-Type': 'multipart/form-data'
-          accept: "application/json"
-        }
-      })
+
+      try {
+        const response = await fetch(`/api/gallery?imageType=imageEmbedding`, {
+          headers: {
+            authorization: `Bearer ${session?.user.accessToken}`,
+          },
+          method: 'POST',
+          body: formData
+        });
+        const result = await response.json()
   
-      const result = await response.json()
-
-      console.log('result: ', result.data)
-      // let image_embedding = result.data.image_embedding
-      // console.log(image_embedding)
-
-      // const binaryString = atob(image_embedding);
-      // // Create a DataView to read the binary data as float32 values
-      // const dataView = new DataView(new ArrayBuffer(binaryString.length));
-      // for (let i = 0; i < binaryString.length; i++) {
-      //     dataView.setUint8(i, binaryString.charCodeAt(i));
-      // }
-      
-      // Read the float32 values from the DataView
-      // const float32Array = new Float32Array(dataView.buffer);
-      // tensor = new ort.Tensor("float32", float32Array, data.image_embedding_shape);
-
-      // ----------------------------------------------------------------
-
-      // Load the Segment Anything pre-computed embedding
-      // Promise.resolve(loadNpyTensor(image_embedding, "float32")).then(
-      //   (embedding) => setTensor(embedding)
-      // );
-    }
-
-    catch(error: any) {
-      console.log(error.message);
-      alert('사용 할 수 없는 이미지 입니다.')
-    }
+        console.log("Success:", result)
+      } catch(error: any) {
+        console.log(error.message);
+        alert('사용 할 수 없는 이미지 입니다.')
+      }
+    }, "image/jpeg")
   }
 
   // Decode a Numpy file into a tensor. 

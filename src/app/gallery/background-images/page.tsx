@@ -22,7 +22,7 @@ const BackgroundImagesPage = () => {
       formData.append('file', acceptedFiles[0])
 
       try {
-        const response = await fetch('/api/gallery', {
+        const response = await fetch(`/api/gallery?imageType=backgroundImage`, {
           headers: {
             authorization: `Bearer ${session?.user.accessToken}`,
           },

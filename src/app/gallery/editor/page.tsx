@@ -1,26 +1,32 @@
 'use client'
 
 import React, { useContext, useState, useEffect, useCallback, useRef } from 'react'
+import Image from 'next/image'
 import Script from 'next/script'
 import AppContext from "@/app/components/hooks/createContext"
+import * as _ from "underscore";
 
-import { useSession } from "next-auth/react";
+import { useSession } from "next-auth/react"
 
 import { useDropzone } from 'react-dropzone'
 import Cropper, { ReactCropperElement } from "react-cropper"
-import "cropperjs/dist/cropper.css";
+import "cropperjs/dist/cropper.css"
 
 const ort = require("onnxruntime-web")
 import { InferenceSession, Tensor } from "onnxruntime-web"
-import { modelScaleProps } from "@/app/components/helpers/Interfaces";
+import { modelScaleProps, modelInputProps } from "@/app/components/helpers/Interfaces"
+import { handleImageScale } from "@/app/components/helpers/scaleHelper"
 
-const MODEL_DIR = "/model/sam_onnx_quantized.onnx";
+const MODEL_DIR = "/model/sam_onnx_quantized.onnx"
+
+const imageClasses = ""
+const maskImageClasses = `absolute opacity-40 pointer-events-none`
 
 const EditorPage: React.FC = () => {
   const {
-    clicks: [clicks],
-    image: [, setImage],
-    maskImg: [, setMaskImg],
+    clicks: [clicks, setClicks],
+    image: [image, setImage],
+    maskImg: [maskImg, setMaskImg],
   } = useContext(AppContext)!
   const [model, setModel] = useState<InferenceSession | null>(null); // ONNX model
   const [tensor, setTensor] = useState<Tensor | null>(null); // Image embedding tensor
@@ -30,10 +36,12 @@ const EditorPage: React.FC = () => {
   const [modelScale, setModelScale] = useState<modelScaleProps | null>(null);
 
 
-
-
   const [imageUrl, setImageUrl] = useState('')
   const [imageSelected, setImageSelected] = useState(false)
+
+
+  const [shouldFitToWidth, setShouldFitToWidth] = useState(true);
+
 
   const { data: session, status } = useSession({ required: true })
 
@@ -155,10 +163,7 @@ const EditorPage: React.FC = () => {
 
         // Load the image
         const url = new URL(imageUrl, location.origin);
-
-
-
-        // loadImage(url);
+        loadImage(url);
 
         // // Load the Segment Anything pre-computed embedding
         // Promise.resolve(loadNpyTensor(IMAGE_EMBEDDING, "float32")).then(
@@ -190,12 +195,35 @@ const EditorPage: React.FC = () => {
         });
         img.width = width; 
         img.height = height; 
+
+
+        // TODO: with this, replace the cropper with the embedded image and the layer
         setImage(img);
       };
     } catch (error) {
       console.log(error);
     }
   };
+
+  const getClick = (x: number, y: number): modelInputProps => {
+    const clickType = 1;
+    return { x, y, clickType };
+  };
+
+  // Get mouse position and scale the (x, y) coordinates back to the natural
+  // scale of the image. Update the state of clicks with setClicks to trigger
+  // the ONNX model to run and generate a new mask via a useEffect in App.tsx
+  const handleMouseMove = _.throttle((e: any) => {
+    let el = e.nativeEvent.target;
+    const rect = el.getBoundingClientRect();
+    let x = e.clientX - rect.left;
+    let y = e.clientY - rect.top;
+    const imageScale = image ? image.width / el.offsetWidth : 1;
+    x *= imageScale;
+    y *= imageScale;
+    const click = getClick(x, y);
+    if (click) setClicks([click]);
+  }, 15);
 
   return (
     <>
@@ -207,7 +235,7 @@ const EditorPage: React.FC = () => {
       <div className="p-5">
         { MyDropzone() }
 
-        { imageSelected && (
+        { imageSelected && !image ? (
           <>
             <Cropper
               src={imageUrl}
@@ -229,6 +257,29 @@ const EditorPage: React.FC = () => {
                   px-2 py-1 border rounded-xl hover:bg-blue-100
               '> Submit </button>
             </form>
+          </>
+        ) : (
+          <>
+            { image && (
+              <Image
+                onMouseMove={handleMouseMove}
+                onMouseOut={() => _.defer(() => setMaskImg(null))}
+                onTouchStart={handleMouseMove}
+                src={image.src} alt={'Croppded image'}
+                className={`
+                  ${shouldFitToWidth ? "w-full" : "h-full"} ${imageClasses}
+                `}
+              />
+
+            )}
+            { maskImg && (
+              <Image
+                src={maskImg.src} alt={'embedded image mask'}
+                className={`
+                  ${shouldFitToWidth ? "w-full" : "h-full"} ${maskImageClasses}
+                `}
+              />
+            )}
           </>
         )}
       </div>

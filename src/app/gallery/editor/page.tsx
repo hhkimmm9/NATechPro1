@@ -11,20 +11,29 @@ import Cropper, { ReactCropperElement } from "react-cropper"
 import "cropperjs/dist/cropper.css";
 
 const ort = require("onnxruntime-web")
-import npyjs from "npyjs"
 import { InferenceSession, Tensor } from "onnxruntime-web"
+import { modelScaleProps } from "@/app/components/helpers/Interfaces";
+
+const MODEL_DIR = "/model/sam_onnx_quantized.onnx";
 
 const EditorPage: React.FC = () => {
   const {
     clicks: [clicks],
     image: [, setImage],
     maskImg: [, setMaskImg],
-  } = useContext(AppContext)
+  } = useContext(AppContext)!
+  const [model, setModel] = useState<InferenceSession | null>(null); // ONNX model
+  const [tensor, setTensor] = useState<Tensor | null>(null); // Image embedding tensor
+
+  // The ONNX model expects the input to be rescaled to 1024. 
+  // The modelScale state variable keeps track of the scale values.
+  const [modelScale, setModelScale] = useState<modelScaleProps | null>(null);
+
+
+
 
   const [imageUrl, setImageUrl] = useState('')
   const [imageSelected, setImageSelected] = useState(false)
-  const [model, setModel] = useState(null) // ONNX model
-  const [tensor, setTensor] = useState(null) // Image embedding tensor
 
   const { data: session, status } = useSession({ required: true })
 
@@ -37,11 +46,6 @@ const EditorPage: React.FC = () => {
     // console.log(event.detail.rotate);
     // console.log(event.detail.scaleX);
     // console.log(event.detail.scaleY);
-
-    const cropper = cropperRef.current?.cropper
-
-    // console.log(cropper?.getCroppedCanvas().toDataURL('image/jpeg'))
-    // console.log(cropper?.getCroppedCanvas())
   }
 
   // handling the drag and drop box.
@@ -51,7 +55,7 @@ const EditorPage: React.FC = () => {
       setImageSelected(true)
 
       // change tha image on the page.
-      let url = window.URL.createObjectURL(acceptedFiles[0])
+      let url = URL.createObjectURL(acceptedFiles[0])
 
       // change image in the page
       setImageUrl(url)
@@ -115,7 +119,7 @@ const EditorPage: React.FC = () => {
     // as users change the cropper
     await cropper?.getCroppedCanvas().toBlob(async (blob: any) => {
       const formData = new FormData()
-      
+
       let imageFile = new File([blob], "image.jpg", { type: "image/jpeg" })
       formData.append("file", imageFile, "image.jpg")
 
@@ -128,8 +132,44 @@ const EditorPage: React.FC = () => {
           body: formData
         });
         const result = await response.json()
-  
-        console.log("Success:", result)
+
+        console.log(result)
+
+
+
+        // Initialize the ONNX model. load the image, and load the SAM
+        // pre-computed image embedding
+
+        // Initialize the ONNX model
+        const initModel = async () => {
+          try {
+            if (MODEL_DIR === undefined) return;
+            const URL: string = MODEL_DIR;
+            const model = await InferenceSession.create(URL);
+            setModel(model);
+          } catch (e) {
+            console.log(e);
+          }
+        };
+        initModel();
+
+        // Load the image
+        const url = new URL(imageUrl, location.origin);
+
+
+
+        // loadImage(url);
+
+        // // Load the Segment Anything pre-computed embedding
+        // Promise.resolve(loadNpyTensor(IMAGE_EMBEDDING, "float32")).then(
+        //   (embedding) => setTensor(embedding)
+        // );
+
+
+
+
+        // tensor = new ort.Tensor("float32", float32Array, data.image_embedding_shape);
+
       } catch(error: any) {
         console.log(error.message);
         alert('사용 할 수 없는 이미지 입니다.')
@@ -137,12 +177,24 @@ const EditorPage: React.FC = () => {
     }, "image/jpeg")
   }
 
-  // Decode a Numpy file into a tensor. 
-  const loadNpyTensor = async (tensorFile: any, dType: any) => {
-    let npLoader = new npyjs();
-    const npArray = await npLoader.load(tensorFile);
-    const tensor = new ort.Tensor(dType, npArray.data, npArray.shape);
-    return tensor;
+  const loadImage = async (url: URL) => {
+    try {
+      const img = new Image();
+      img.src = url.href;
+      img.onload = () => {
+        const { height, width, samScale } = handleImageScale(img);
+        setModelScale({
+          height: height,  // original image height
+          width: width,  // original image width
+          samScale: samScale, // scaling factor for image which has been resized to longest side 1024
+        });
+        img.width = width; 
+        img.height = height; 
+        setImage(img);
+      };
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

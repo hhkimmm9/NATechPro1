@@ -5,17 +5,23 @@
 // LICENSE file in the root directory of this source tree.
 
 import { createContext } from "react";
+import { modelInputProps } from "@/app/components/helpers/Interfaces";
 
-interface IContext {
-  clicks: (React.Dispatch<React.SetStateAction<null>> | null)[];
-  image: (React.Dispatch<React.SetStateAction<null>> | null)[];
-  maskImg: (React.Dispatch<React.SetStateAction<null>> | null)[]; 
+interface contextProps {
+  clicks: [
+    clicks: modelInputProps[] | null,
+    setClicks: (e: modelInputProps[] | null) => void
+  ];
+  image: [
+    image: HTMLImageElement | null,
+    setImage: (e: HTMLImageElement | null) => void
+  ];
+  maskImg: [
+    maskImg: HTMLImageElement | null,
+    setMaskImg: (e: HTMLImageElement | null) => void
+  ];
 }
 
-const AppContext = createContext<IContext>({
-  clicks: [],
-  image: [],
-  maskImg: []
-});
+const AppContext = createContext<contextProps | null>(null);
 
 export default AppContext;

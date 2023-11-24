@@ -1,8 +1,6 @@
 'use client'
 
 import React, { useContext, useState, useEffect, useCallback, useRef } from 'react'
-import Image from 'next/image'
-import Script from 'next/script'
 import AppContext from "@/app/components/hooks/createContext"
 import * as _ from "underscore";
 
@@ -12,10 +10,13 @@ import { useDropzone } from 'react-dropzone'
 import Cropper, { ReactCropperElement } from "react-cropper"
 import "cropperjs/dist/cropper.css"
 
-const ort = require("onnxruntime-web")
 import { InferenceSession, Tensor } from "onnxruntime-web"
 import { modelScaleProps, modelInputProps } from "@/app/components/helpers/Interfaces"
 import { handleImageScale } from "@/app/components/helpers/scaleHelper"
+
+const ort = require("onnxruntime-web");
+/* @ts-ignore */
+import npyjs from "npyjs";
 
 const MODEL_DIR = "/model/sam_onnx_quantized.onnx"
 
@@ -106,23 +107,20 @@ const EditorPage: React.FC = () => {
       )
     }
   }
+
+
+  // Decode a Numpy file into a tensor. 
+  const loadNpyTensor = async (tensorFile: string, dType: string) => {
+    let npLoader = new npyjs();
+    const npArray = await npLoader.load(tensorFile);
+    const tensor = new ort.Tensor(dType, npArray.data, npArray.shape);
+    return tensor;
+  };
   
   const submitImage = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const cropper = cropperRef.current?.cropper
-
-    // cropper?.getCroppedCanvas({
-    //   width: 288,
-    //   height: 162,
-    // });
-
-    // cropper?.getCroppedCanvas({
-    //   minWidth: 256,
-    //   minHeight: 256,
-    //   maxWidth: 4096,
-    //   maxHeight: 4096,
-    // })
 
     // as users change the cropper
     await cropper?.getCroppedCanvas().toBlob(async (blob: any) => {
@@ -141,9 +139,9 @@ const EditorPage: React.FC = () => {
         });
         const result = await response.json()
 
-        console.log(result)
-
-
+        // console.log(result)
+        // float32Array: {0; -0.136..., 1: 0..., ... }
+        // imageEmbeddingShape: (4) [1, 256, 64, 64]
 
         // Initialize the ONNX model. load the image, and load the SAM
         // pre-computed image embedding
@@ -166,15 +164,9 @@ const EditorPage: React.FC = () => {
         loadImage(url);
 
         // // Load the Segment Anything pre-computed embedding
-        // Promise.resolve(loadNpyTensor(IMAGE_EMBEDDING, "float32")).then(
-        //   (embedding) => setTensor(embedding)
-        // );
-
-
-
-
-        // tensor = new ort.Tensor("float32", float32Array, data.image_embedding_shape);
-
+        Promise.resolve(loadNpyTensor(result.float32Array, "float32")).then(
+          (embedding) => setTensor(embedding)
+        );
       } catch(error: any) {
         console.log(error.message);
         alert('사용 할 수 없는 이미지 입니다.')
@@ -196,8 +188,6 @@ const EditorPage: React.FC = () => {
         img.width = width; 
         img.height = height; 
 
-
-        // TODO: with this, replace the cropper with the embedded image and the layer
         setImage(img);
       };
     } catch (error) {
@@ -227,11 +217,6 @@ const EditorPage: React.FC = () => {
 
   return (
     <>
-      {/* <Script
-        src='https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js'
-        onLoad={() => { console.log('onnx script loaded correctly.'); }}
-      /> */}
-      
       <div className="p-5">
         { MyDropzone() }
 
@@ -261,7 +246,7 @@ const EditorPage: React.FC = () => {
         ) : (
           <>
             { image && (
-              <Image
+              <img
                 onMouseMove={handleMouseMove}
                 onMouseOut={() => _.defer(() => setMaskImg(null))}
                 onTouchStart={handleMouseMove}
@@ -269,16 +254,16 @@ const EditorPage: React.FC = () => {
                 className={`
                   ${shouldFitToWidth ? "w-full" : "h-full"} ${imageClasses}
                 `}
-              />
+              ></img>
 
             )}
             { maskImg && (
-              <Image
+              <img
                 src={maskImg.src} alt={'embedded image mask'}
                 className={`
                   ${shouldFitToWidth ? "w-full" : "h-full"} ${maskImageClasses}
                 `}
-              />
+              ></img>
             )}
           </>
         )}

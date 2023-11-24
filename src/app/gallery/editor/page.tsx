@@ -11,8 +11,10 @@ import Cropper, { ReactCropperElement } from "react-cropper"
 import "cropperjs/dist/cropper.css"
 
 import { InferenceSession, Tensor } from "onnxruntime-web"
-import { modelScaleProps, modelInputProps } from "@/app/components/helpers/Interfaces"
 import { handleImageScale } from "@/app/components/helpers/scaleHelper"
+import { modelScaleProps, modelInputProps } from "@/app/components/helpers/Interfaces"
+import { onnxMaskToImage } from "@/app/components/helpers/maskUtils";
+import { modelData } from "@/app/components/helpers/onnxModelAPI";
 
 const ort = require("onnxruntime-web");
 /* @ts-ignore */
@@ -22,6 +24,7 @@ const MODEL_DIR = "/model/sam_onnx_quantized.onnx"
 
 const imageClasses = ""
 const maskImageClasses = `absolute opacity-40 pointer-events-none`
+const flexCenterClasses = "flex items-center justify-center";
 
 const EditorPage: React.FC = () => {
   const {
@@ -36,13 +39,10 @@ const EditorPage: React.FC = () => {
   // The modelScale state variable keeps track of the scale values.
   const [modelScale, setModelScale] = useState<modelScaleProps | null>(null);
 
-
   const [imageUrl, setImageUrl] = useState('')
   const [imageSelected, setImageSelected] = useState(false)
 
-
   const [shouldFitToWidth, setShouldFitToWidth] = useState(true);
-
 
   const { data: session, status } = useSession({ required: true })
 
@@ -108,6 +108,39 @@ const EditorPage: React.FC = () => {
     }
   }
 
+  useEffect(() => {
+    runONNX();
+  }, [clicks])
+
+  const runONNX = async () => {
+    try {
+      if (
+        model === null ||
+        clicks === null ||
+        tensor === null ||
+        modelScale === null
+      )
+        return;
+      else {
+        // Preapre the model input in the correct format for SAM. 
+        // The modelData function is from onnxModelAPI.tsx.
+        const feeds = modelData({
+          clicks,
+          tensor,
+          modelScale,
+        });
+        if (feeds === undefined) return;
+        // Run the SAM ONNX model with the feeds returned from modelData()
+        const results = await model.run(feeds);
+        const output = results[model.outputNames[0]];
+        // The predicted mask returned from the ONNX model is an array which is 
+        // rendered as an HTML image using onnxMaskToImage() from maskUtils.tsx.
+        setMaskImg(onnxMaskToImage(output.data, output.dims[2], output.dims[3]));
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   // Decode a Numpy file into a tensor. 
   const loadNpyTensor = async (tensorFile: string, dType: string) => {
@@ -245,26 +278,30 @@ const EditorPage: React.FC = () => {
           </>
         ) : (
           <>
-            { image && (
-              <img
-                onMouseMove={handleMouseMove}
-                onMouseOut={() => _.defer(() => setMaskImg(null))}
-                onTouchStart={handleMouseMove}
-                src={image.src} alt={'Croppded image'}
-                className={`
-                  ${shouldFitToWidth ? "w-full" : "h-full"} ${imageClasses}
-                `}
-              ></img>
+            <div className={`${flexCenterClasses} w-full h-full`}>
+              <div className={`${flexCenterClasses} relative w-[90%] h-[90%]`}>
+                { image && (
+                  <img
+                    onMouseMove={handleMouseMove}
+                    onMouseOut={() => _.defer(() => setMaskImg(null))}
+                    onTouchStart={handleMouseMove}
+                    src={image.src} alt={'Croppded image'}
+                    className={`
+                      ${shouldFitToWidth ? "w-full" : "h-full"} ${imageClasses}
+                    `}
+                  ></img>
 
-            )}
-            { maskImg && (
-              <img
-                src={maskImg.src} alt={'embedded image mask'}
-                className={`
-                  ${shouldFitToWidth ? "w-full" : "h-full"} ${maskImageClasses}
-                `}
-              ></img>
-            )}
+                )}
+                { maskImg && (
+                  <img
+                    src={maskImg.src} alt={'embedded image mask'}
+                    className={`
+                      ${shouldFitToWidth ? "w-full" : "h-full"} ${maskImageClasses}
+                    `}
+                  ></img>
+                )}
+              </div>
+            </div>
           </>
         )}
       </div>

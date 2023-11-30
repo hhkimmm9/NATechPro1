@@ -20,31 +20,14 @@ const BackgroundImagesPage = () => {
     const onDrop = useCallback(async (acceptedFiles: any) => {
       const formData = new FormData()
       formData.append('file', acceptedFiles[0])
-      formData.append('api_key', process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY || "")
-      formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_PRESET || "")
 
       try {
-        const url = `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_NAME}/upload`
-
-        const responseCloudinary = await fetch(url, {
-          method: "POST",
-          body: formData
-        });
-        const resultCloudinary = await responseCloudinary.json();
-
-        // console.log(resultCloudinary)
-
-        const response = await fetch('/api/gallery', {
+        const response = await fetch(`/api/gallery?imageType=backgroundImage`, {
           headers: {
             authorization: `Bearer ${session?.user.accessToken}`,
           },
           method: 'POST',
-          body: JSON.stringify({
-            name: `${resultCloudinary.original_filename}_${resultCloudinary.asset_id}`,
-            image: resultCloudinary.secure_url,
-            type: 'backgroundImage',
-            userID: session?.user._id
-          })
+          body: formData
         });
         const result = await response.json();
 

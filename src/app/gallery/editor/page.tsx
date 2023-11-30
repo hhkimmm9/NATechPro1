@@ -142,6 +142,27 @@ const EditorPage: React.FC = () => {
     }
   };
 
+  const loadImage = async (url: URL) => {
+    try {
+      const img = new Image();
+      img.src = url.href;
+      img.onload = () => {
+        const { height, width, samScale } = handleImageScale(img);
+        setModelScale({
+          height: height,  // original image height
+          width: width,  // original image width
+          samScale: samScale, // scaling factor for image which has been resized to longest side 1024
+        });
+        img.width = width; 
+        img.height = height; 
+
+        setImage(img);
+      };
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   // Decode a Numpy file into a tensor. 
   const loadNpyTensor = async (tensorFile: string, dType: string) => {
     let npLoader = new npyjs();
@@ -185,6 +206,7 @@ const EditorPage: React.FC = () => {
             if (MODEL_DIR === undefined) return;
             const URL: string = MODEL_DIR;
             const model = await InferenceSession.create(URL);
+            console.log('model:', model)
             setModel(model);
           } catch (e) {
             console.log(e);
@@ -206,27 +228,6 @@ const EditorPage: React.FC = () => {
       }
     }, "image/jpeg")
   }
-
-  const loadImage = async (url: URL) => {
-    try {
-      const img = new Image();
-      img.src = url.href;
-      img.onload = () => {
-        const { height, width, samScale } = handleImageScale(img);
-        setModelScale({
-          height: height,  // original image height
-          width: width,  // original image width
-          samScale: samScale, // scaling factor for image which has been resized to longest side 1024
-        });
-        img.width = width; 
-        img.height = height; 
-
-        setImage(img);
-      };
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const getClick = (x: number, y: number): modelInputProps => {
     const clickType = 1;
